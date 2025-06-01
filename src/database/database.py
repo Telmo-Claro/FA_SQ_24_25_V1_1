@@ -60,3 +60,15 @@ class database:
         except sqlite3.OperationalError as e:
             log_exception(e, "during database setup")
 
+    def add_user(self, user):
+        is user.role != "Super Administrator" or user.role is not "System Administrator":
+            return False
+        try:
+            with sqlite3.connect(self.path) as conn:
+                cursor = conn.cursor()
+                queries = []
+                for query in queries:
+                    cursor.execute(query)
+                cursor.close()
+        except sqlite3.OperationalError as e:
+            log_exception(e, "during database setup")

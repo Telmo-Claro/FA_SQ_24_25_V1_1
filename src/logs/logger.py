@@ -14,4 +14,4 @@ def setup_logging():
 def log_exception(e: Exception, context: str = ""):
     """Log an exception with optional context"""
     logging.error(f"Exception occurred{f' in {context}' if context else ''}: {str(e)}")
-    logging.error(traceback.format_exc())  # Include full stack trace
+    logging.error(traceback.format_exc())

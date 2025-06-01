@@ -1,7 +1,11 @@
-from src.models.Super_Administrator import SuperAdministrator
+from src.models.super_administrator import SuperAdministrator
+from src.models.user import User
 
 def auth_super_admin(username, password):
-    sa = SuperAdministrator()
+    sa = SuperAdministrator
     if username is sa.username and password is sa.password:
-        return True
+        return sa
     return False
+
+def auth_user(username, password, role):
+    return

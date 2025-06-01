@@ -1,7 +1,10 @@
-import src.utils.validate as validate
-
+from contextlib import nullcontext
+import src.utils.auth as auth
+from datetime import datetime
+from  src.models.user import User
+from src.logs.logger import log_exception
+from src.UI.super_admin import *
 class ui:
-
     def landing(self):
         while True:
             print(f"Welcome to Urban Mobility!")
@@ -16,8 +19,15 @@ class ui:
             elif choice == "1":
                 username = input("Username: ")
                 password = input("Password: ")
-                if validate.validate_super_admin(username, password) is True:
-                    print(f"Welcome!")
+                try:
+                    sa = auth.auth_super_admin(username, password)
+                    if not sa:
+                        print("Wrong username or password. Try again!")
+                    else:
+                        landing_super_admin(self)
+                except Exception as e:
+                    log_exception(e, "during super admin login")
+                    
             elif choice == "2":
                 username = input("Username: ")
                 password = input("Password: ")
@@ -29,9 +39,4 @@ class ui:
     def landing_service_engineer(self):
         while True:
             print(f"Nothing to see here! (yet)")
-    def landing_system_admin(self):
-        while True:
-            print(f"Nothing to see here! (yet)")
-    def landing_super_admin(self):
-        while True:
-            print(f"Nothing to see here! (yet)")
+
