@@ -13,5 +13,11 @@ class ServiceEngineer:
         self.last_name = last_name
         self.registration_date = registration_date
 
+    def UpdatePassword(self):
+        newPassword = input(f"New password: ")
+        self.password = newPassword
+        return
+    def UpdateScooterInfo(self):
+        return
     def __str__(self):
         return f"Service Engineer: {self.username}, Name: {self.first_name} {self.last_name}, Registered on: {self.registration_date}"

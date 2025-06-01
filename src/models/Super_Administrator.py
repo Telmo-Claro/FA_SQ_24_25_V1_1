@@ -30,6 +30,8 @@
 # The fixed username must be: super_admin
 # The fixed password must be: Admin_123?
 
+from src.models.System_Administrator import SystemAdministrator
+
 class SuperAdministrator:
     def __init__(self):
         self.username = "super_admin"
@@ -39,3 +41,10 @@ class SuperAdministrator:
 
     def __str__(self):
         return f"Super Administrator: {self.username}, Name: {self.first_name} {self.last_name}"
+
+    def CreateSystemAdmin(self):
+        username = input(f"Username: ")
+        password = input(f"Password: ")
+        first_name = input(f"First Name: ")
+        last_name = input(f"Last Name: ")
+        NewSystemAdmin = SystemAdministrator(username, password, first_name, last_name)
