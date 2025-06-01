@@ -4,12 +4,8 @@ import traceback
 from datetime import datetime
 
 def setup_logging():
-    # checks for logs folder
-    log_dir = Path(__file__).parent / "logs"
-    log_dir.mkdir(exist_ok=True)
-
     # create a log file with datetime in the filename
-    log_file = log_dir / f"error_log_{datetime.now().strftime('%Y%m%d')}.log"
+    log_file = Path(__file__).parent / f"error_log_{datetime.now().strftime('%Y%m%d')}.log"
     logging.basicConfig(
         level=logging.ERROR, 
         format='%(asctime)s - %(levelname)s - %(message)s',

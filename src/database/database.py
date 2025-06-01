@@ -1,7 +1,7 @@
 import sqlite3
 from pathlib import Path
 from src.models.System_Administrator import SystemAdministrator
-from logs.logger import log_exception
+from src.logs.logger import log_exception
 
 class database:
     def __init__(self, db_name):
