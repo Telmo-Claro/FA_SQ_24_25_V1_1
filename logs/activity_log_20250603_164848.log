@@ -1,0 +1,11 @@
+2025-06-03 16:48:48,715 - INFO - [DATABASE] Creating database
+2025-06-03 16:48:48,715 - INFO - [DATABASE] Database tables created successfully
+2025-06-03 16:48:57,681 - INFO - [AUTH] Authentication attempt for Super Admin: super_admin
+2025-06-03 16:48:57,681 - INFO - [AUTH] Super Admin authentication successful
+2025-06-03 16:49:10,115 - INFO - [DATABASE] Attempting to add new user: telmoclaro
+2025-06-03 16:49:10,118 - ERROR - Exception occurred in during add user to databse: UNIQUE constraint failed: users.username
+2025-06-03 16:49:10,118 - ERROR - Traceback (most recent call last):
+  File "c:\Users\Telmo Claro\Documents\Projects\FA_SQ_24_25_V1_1\src\database.py", line 74, in add_user
+    cursor.execute(query, (Fname, Lname, Uname, Pword, Role, Rdate))
+sqlite3.IntegrityError: UNIQUE constraint failed: users.username
+

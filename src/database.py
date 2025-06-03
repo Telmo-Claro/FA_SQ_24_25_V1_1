@@ -1,13 +1,14 @@
 import sqlite3
 from pathlib import Path
-from src.logs.logger import log_exception
 
 class Database:
-    def __init__(self, db_name):
+    def __init__(self, logger, db_name):
+        self._logger = logger
         self.db_name = db_name
         self.path = Path(__file__).parent / f"{db_name}.db"
 
     def create(self):
+        self._logger.log_info(f"Creating database", "DATABASE")
         try:
             with sqlite3.connect(self.path) as conn:
                 cursor = conn.cursor()
@@ -56,11 +57,14 @@ class Database:
                 for query in queries:
                     cursor.execute(query)
                 cursor.close()
-        except sqlite3.OperationalError as e:
-            log_exception(e, "during data setup")
+                self._logger.log_info("Database tables created successfully", "DATABASE")
+        except Exception as e:
+            self._logger.log_error(e, "during data setup")
 
     def add_user(self, user, Fname, Lname, Uname, Pword, Role, Rdate):
+        self._logger.log_info(f"Attempting to add new user: {Uname}", "DATABASE")
         if user.role not in ["Super Administrator", "System Administrator"]:
+            self._logger.log_warning(f"Unauthorized user role: {user.role} attempted to add new user", "DATABASE")
             return False
         try:
             with sqlite3.connect(self.path) as conn:
@@ -69,7 +73,8 @@ class Database:
                            VALUES (?, ?, ?, ?, ?, ?)"""
                 cursor.execute(query, (Fname, Lname, Uname, Pword, Role, Rdate))
                 cursor.close()
+                self._logger.log_info(f"Successfully added user: {Uname}", "DATABASE")
                 return True
-        except sqlite3.OperationalError as e:
-            log_exception(e, "during add user to databse")
+        except Exception as e:
+            self._logger.log_error(e, "during add user to databse")
             return False

@@ -1,9 +1,11 @@
-from data import database
-from logs import logger
-from src.UI import main
+import logger
+import ui
 
 if __name__ == "__main__":
-    logger.setup_logging() # initializes logging stuff
-    db = database.Database("Urban Mobility")
-    db.create()
-    main.landing()
+    log = logger.Logger() # initializes the logger
+    try:
+        main_ui = ui.Ui(log) # initializes the main UI with logger
+        main_ui.Landing() # start the application with the landing page
+    except Exception as e:
+        log.log_error(e, "MAIN")
+        print("An error occurred. Please check the logs for details.")
