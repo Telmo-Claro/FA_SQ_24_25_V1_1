@@ -1,11 +1,9 @@
-from database.database import database
-from src.UI import ui
-from logs.logger import setup_logging, log_exception
+from data import database
+from logs import logger
+from src.UI import main
 
-# Initialize logging at application start
 if __name__ == "__main__":
-    setup_logging()
-    db = database("Urban Mobility")
+    logger.setup_logging() # initializes logging stuff
+    db = database.Database("Urban Mobility")
     db.create()
-    userinterface = ui.ui()
-    userinterface.landing()
+    main.landing()

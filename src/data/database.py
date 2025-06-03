@@ -1,9 +1,8 @@
 import sqlite3
 from pathlib import Path
-from src.models.System_Administrator import SystemAdministrator
 from src.logs.logger import log_exception
 
-class database:
+class Database:
     def __init__(self, db_name):
         self.db_name = db_name
         self.path = Path(__file__).parent / f"{db_name}.db"
@@ -40,17 +39,17 @@ class database:
                         location TEXT,
                         out_of_service_status TEXT,
                         mileage TEXT,
-                        last_maintenance_date TEXT
+                        last_maintenance_date DATE
                     )""",
 
                     """CREATE TABLE IF NOT EXISTS users (
                         id INTEGER PRIMARY KEY,
-                        username TEXT UNIQUE,
-                        password TEXT,
-                        role TEXT
                         first_name TEXT,
                         last_name TEXT,
-                        registration_date TEXT
+                        username TEXT UNIQUE,
+                        password TEXT,
+                        user_role TEXT,
+                        registration_date DATE
                     )""",
 
                     ]
@@ -58,17 +57,19 @@ class database:
                     cursor.execute(query)
                 cursor.close()
         except sqlite3.OperationalError as e:
-            log_exception(e, "during database setup")
+            log_exception(e, "during data setup")
 
-    def add_user(self, user):
-        is user.role != "Super Administrator" or user.role is not "System Administrator":
+    def add_user(self, user, Fname, Lname, Uname, Pword, Role, Rdate):
+        if user.role not in ["Super Administrator", "System Administrator"]:
             return False
         try:
             with sqlite3.connect(self.path) as conn:
                 cursor = conn.cursor()
-                queries = []
-                for query in queries:
-                    cursor.execute(query)
+                query = """INSERT INTO users (first_name, last_name, username, password, user_role, registration_date)
+                           VALUES (?, ?, ?, ?, ?, ?)"""
+                cursor.execute(query, (Fname, Lname, Uname, Pword, Role, Rdate))
                 cursor.close()
+                return True
         except sqlite3.OperationalError as e:
-            log_exception(e, "during database setup")
+            log_exception(e, "during add user to databse")
+            return False

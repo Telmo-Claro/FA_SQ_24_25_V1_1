@@ -1,0 +1,66 @@
+2025-06-02 14:19:16,125 - ERROR - Exception occurred in during super admin login: 'Ui' object has no attribute 'firstname'
+2025-06-02 14:19:16,126 - ERROR - Traceback (most recent call last):
+  File "C:\Users\Telmo Claro\Documents\Projects\FA_SQ_24_25_V1_1\src\UI\ui.py", line 27, in landing
+    landing_super_admin(self)
+  File "C:\Users\Telmo Claro\Documents\Projects\FA_SQ_24_25_V1_1\src\UI\super_admin.py", line 6, in landing_super_admin
+    print(f"Welcome {user.firstname} {user.lastname}!")
+AttributeError: 'Ui' object has no attribute 'firstname'
+
+2025-06-02 14:19:28,285 - ERROR - Exception occurred in during super admin login: 'Ui' object has no attribute 'firstname'
+2025-06-02 14:19:28,293 - ERROR - Traceback (most recent call last):
+  File "C:\Users\Telmo Claro\Documents\Projects\FA_SQ_24_25_V1_1\src\UI\ui.py", line 27, in landing
+    landing_super_admin(self)
+  File "C:\Users\Telmo Claro\Documents\Projects\FA_SQ_24_25_V1_1\src\UI\super_admin.py", line 6, in landing_super_admin
+    print(f"Welcome {user.firstname} {user.lastname}!")
+AttributeError: 'Ui' object has no attribute 'firstname'
+
+2025-06-02 14:21:35,839 - ERROR - Exception occurred in during super admin login: database.add_user() takes 2 positional arguments but 7 were given
+2025-06-02 14:21:35,840 - ERROR - Traceback (most recent call last):
+  File "C:\Users\Telmo Claro\Documents\Projects\FA_SQ_24_25_V1_1\src\UI\ui.py", line 27, in landing
+    landing_super_admin(sa)
+  File "C:\Users\Telmo Claro\Documents\Projects\FA_SQ_24_25_V1_1\src\UI\super_admin.py", line 20, in landing_super_admin
+    add_user_super_admin(user)
+  File "C:\Users\Telmo Claro\Documents\Projects\FA_SQ_24_25_V1_1\src\UI\super_admin.py", line 32, in add_user_super_admin
+    database.add_user(user, first_name, last_name, username, password, role, registration_date)
+TypeError: database.add_user() takes 2 positional arguments but 7 were given
+
+2025-06-02 14:23:22,092 - ERROR - Exception occurred in during super admin login: database.add_user() missing 1 required positional argument: 'registration_date'
+2025-06-02 14:23:22,092 - ERROR - Traceback (most recent call last):
+  File "C:\Users\Telmo Claro\Documents\Projects\FA_SQ_24_25_V1_1\src\UI\ui.py", line 27, in landing
+    landing_super_admin(sa)
+  File "C:\Users\Telmo Claro\Documents\Projects\FA_SQ_24_25_V1_1\src\UI\super_admin.py", line 20, in landing_super_admin
+    add_user_super_admin(user)
+  File "C:\Users\Telmo Claro\Documents\Projects\FA_SQ_24_25_V1_1\src\UI\super_admin.py", line 32, in add_user_super_admin
+    database.add_user(user, first_name, last_name, username, password, role, registration_date)
+TypeError: database.add_user() missing 1 required positional argument: 'registration_date'
+
+2025-06-02 15:14:35,641 - ERROR - Exception occurred in during add user to databse: table users has no column named registration_date
+2025-06-02 15:14:35,642 - ERROR - Traceback (most recent call last):
+  File "C:\Users\Telmo Claro\Documents\Projects\FA_SQ_24_25_V1_1\src\data\database.py", line 70, in add_user
+    cursor.execute(query, (Fname, Lname, Uname, Pword, Role, Rdate))
+sqlite3.OperationalError: table users has no column named registration_date
+
+2025-06-02 15:16:58,118 - ERROR - Exception occurred in during add user to databse: table users has no column named registration_date
+2025-06-02 15:16:58,119 - ERROR - Traceback (most recent call last):
+  File "C:\Users\Telmo Claro\Documents\Projects\FA_SQ_24_25_V1_1\src\data\database.py", line 70, in add_user
+    cursor.execute(query, (Fname, Lname, Uname, Pword, Role, Rdate))
+sqlite3.OperationalError: table users has no column named registration_date
+
+2025-06-02 15:17:16,355 - ERROR - Exception occurred in during add user to databse: table users has no column named registration_date
+2025-06-02 15:17:16,355 - ERROR - Traceback (most recent call last):
+  File "C:\Users\Telmo Claro\Documents\Projects\FA_SQ_24_25_V1_1\src\data\database.py", line 70, in add_user
+    cursor.execute(query, (Fname, Lname, Uname, Pword, Role, Rdate))
+sqlite3.OperationalError: table users has no column named registration_date
+
+2025-06-02 15:19:12,065 - ERROR - Exception occurred in during add user to databse: table users has no column named registration_date
+2025-06-02 15:19:12,067 - ERROR - Traceback (most recent call last):
+  File "C:\Users\Telmo Claro\Documents\Projects\FA_SQ_24_25_V1_1\src\data\database.py", line 70, in add_user
+    cursor.execute(query, (Fname, Lname, Uname, Pword, Role, Rdate))
+sqlite3.OperationalError: table users has no column named registration_date
+
+2025-06-02 15:29:05,865 - ERROR - Exception occurred in during add user to databse: table users has no column named registration_date
+2025-06-02 15:29:05,866 - ERROR - Traceback (most recent call last):
+  File "C:\Users\Telmo Claro\Documents\Projects\FA_SQ_24_25_V1_1\src\data\database.py", line 70, in add_user
+    cursor.execute(query, (Fname, Lname, Uname, Pword, Role, Rdate))
+sqlite3.OperationalError: table users has no column named registration_date
+
