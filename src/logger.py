@@ -2,6 +2,7 @@ import logging
 from pathlib import Path
 import traceback
 from datetime import datetime
+import utils
 
 class Logger():
     def __init__(self):
@@ -19,15 +20,21 @@ class Logger():
         
     def log_info(self, message: str, context: str = ""): # for normal activity
         """Log information messages"""
+        message = utils.utils_hash(message)
+        context = utils.utils_hash(context) if context else ""
         logging.info(f"{f'[{context}] ' if context else ''}{message}")
 
     def log_warning(self, message: str, context: str = ""): # casual warnings
         """Log warning messages"""
+        message = utils.utils_hash(message)
+        context = utils.utils_hash(context) if context else ""
         logging.warning(f"{f'[{context}] ' if context else ''}{message}")
 
     def log_error(self, e: Exception, context: str = ""): # severe errors in the code
         """Log an exception with optional context"""
-        logging.error(f"Exception occurred{f' in {context}' if context else ''}: {str(e)}")
+        error_message = utils.utils_hash(str(e))  # Hash only the error message string
+        context = utils.utils_hash(context) if context else ""
+        logging.error(f"Exception occurred{f' in {context}' if context else ''}: {error_message}")
         logging.error(traceback.format_exc())
 
 

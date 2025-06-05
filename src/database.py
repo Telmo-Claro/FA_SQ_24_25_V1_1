@@ -1,5 +1,6 @@
 import sqlite3
 from pathlib import Path
+import utils
 
 class Database:
     def __init__(self, logger, db_name):
@@ -57,18 +58,19 @@ class Database:
                 for query in queries:
                     cursor.execute(query)
                 cursor.close()
+                conn.commit()
                 self._logger.log_info("Database tables created successfully", "DATABASE")
+
         except Exception as e:
             self._logger.log_error(e, "during data setup")
 
-    def add_user(self, user, Fname, Lname, Uname, Pword, Role, Rdate):
+    def add_user(self, Fname, Lname, Uname, Pword, Role, Rdate):
         self._logger.log_info(f"Attempting to add new user: {Uname}", "DATABASE")
-        if user.role not in ["Super Administrator", "System Administrator"]:
-            self._logger.log_warning(f"Unauthorized user role: {user.role} attempted to add new user", "DATABASE")
-            return False
         try:
             with sqlite3.connect(self.path) as conn:
                 cursor = conn.cursor()
+                Uname = utils.symmetric_encrypt(Uname)
+                Pword = utils.utils_hash(Pword)
                 query = """INSERT INTO users (first_name, last_name, username, password, user_role, registration_date)
                            VALUES (?, ?, ?, ?, ?, ?)"""
                 cursor.execute(query, (Fname, Lname, Uname, Pword, Role, Rdate))
@@ -78,3 +80,33 @@ class Database:
         except Exception as e:
             self._logger.log_error(e, "during add user to databse")
             return False
+
+    def delete_user(self, username, password):
+        self._logger.log_info(f"Attempting to delete user: {username}", "DATABASE")
+        users = self.get_users()
+        to_delete = None
+        for user in users:
+            if utils.symmetric_decrypt(user[2]) == username and utils.utils_hash(user[3]) == password:
+                to_delete = user
+        try:
+            with sqlite3.connect(self.path) as conn:
+                cursor = conn.cursor()
+                query = """DELETE FROM users WHERE username = ? AND password = ?"""
+                cursor.execute(query, (username, password))
+                cursor.close()
+                self._logger.log_info(f"Successfully deleted user: {username}", "DATABASE")
+                return True
+        except Exception as e:
+            self._logger.log_error(e, "during delete user from database")
+            return False
+
+    def get_users(self):
+        self._logger.log_info(f"Attempting to get usernames and passwords", "DATABASE")
+        with sqlite3.connect(self.path) as conn:
+            cursor = conn.cursor()
+            query = """SELECT * FROM users"""
+            cursor.execute(query)
+            users = cursor.fetchall()
+            cursor.close()
+            self._logger.log_info(f"Successfully retrieved usernames and passwords", "DATABASE")
+            return users

@@ -1,47 +1,38 @@
 import database
 from datetime import datetime
-import auth
-import os
+import authenticator
+import utils
+import logger
 
-class Ui():
-    def __init__(self, logger):
-        self._logger = logger
+class Ui:
+    def __init__(self):
+        self._logger = logger.Logger()
         self._db = database.Database(self._logger, "urban_mobility")
         self._db.create()
-    
-    def cls(self):
-        """Clear the console screen."""
-        os.system('cls' if os.name == 'nt' else 'clear')
+        self._db.add_user("Super", "Administrator", "super_admin", "Admin_123?", "Super Administrator", datetime.now())
 
-    def Landing(self):
+
+    def landing(self):
         try:
-            self.cls()
+            utils.cls()
             while True:
                 print(f"Welcome to Urban Mobility!")
                 print(f"To navigate, please enter the numerical value")
-                print(f"Log in as: ")
-                print(f"1) Super Administrator")
-                print(f"2) System Administrator")
-                print(f"3) Service Engineer")
-                print(f"4) Exit")
+                print(f"To login, enter th")
+                print(f"1) Login")
+                print(f"2) Exit")
                 choice = input("> ")
-                if choice == "4":
+                if choice == "2":
                     return
                 elif choice == "1":
                     username = input("Username: ")
                     password = input("Password: ")
-                    temp_auth = auth.Authenticator(self._logger)
-                    sa = temp_auth.auth_super_admin(username, password)
-                    if not sa:
-                        print("Wrong username or password. Try again!")
-                    else:
+                    auth = authenticator.Authenticator(self._logger)
+                    sa = auth.auth_super_admin(username, password)
+                    if sa:
                         self.landing_super_admin(sa)
-                elif choice == "2":
-                    username = input("Username: ")
-                    password = input("Password: ")
-                elif choice == "3":
-                    username = input("Username: ")
-                    password = input("Password: ")
+                    else:
+                        print(f"Wrong username or password. Try again!")
                 else:
                     print(f"Wrong input! Try again!")
         except Exception as e:
@@ -49,26 +40,30 @@ class Ui():
             print("An error occurred. Sorry for the inconvenience.")
 
     def landing_super_admin(self, user):
-        while True:
-            print(f"Welcome {user.firstname} {user.lastname}!")
-            print(f"To navigate, please enter the numerical value")
-            print(f"Choose a sub-menu")
-            print(f"1) Users")
-            print(f"2) Exit")
-            choice = input("> ")
-            if choice == "2":
-                return
-            elif choice == "1":
-                print(f"2) Add User")
-                print(f"1) View Users")
-                print(f"3) Delete User")
-                print(f"4) Update User")
-                print(f"5) Back")
+        try:
+            while True:
+                utils.cls()
+                print(f"Welcome {user.firstname} {user.lastname}!")
+                print(f"To navigate, please enter the numerical value")
+                print(f"Choose a sub-menu")
+                print(f"1) Users")
+                print(f"2) Exit")
                 choice = input("> ")
-                if choice == "1":
-                    self.add_user_super_admin(user)
-            else:
-                print(f"Wrong input! Try again!")
+                if choice == "2":
+                    return
+                elif choice == "1":
+                    print(f"2) Add User")
+                    print(f"1) View Users")
+                    print(f"3) Delete User")
+                    print(f"4) Update User")
+                    print(f"5) Back")
+                    choice = input("> ")
+                    if choice == "1":
+                        self.add_user_super_admin(user)
+                else:
+                    print(f"Wrong input! Try again!")
+        except Exception as e:
+            self._logger.log_error(e, "during landing page navigation")
 
     def add_user_super_admin(self, user):
         try:

@@ -1,0 +1,10 @@
+2025-06-05 16:53:42,180 - INFO - [8e66390792b30692e51e2a8c8cc72d201cf528592c72df8accfe2d9459a4eaee] 725716b6df2a2ce3060b1681ae49712313e3156ab2af1b2ee7585b72b69dc7d5
+2025-06-05 16:53:42,191 - INFO - [8e66390792b30692e51e2a8c8cc72d201cf528592c72df8accfe2d9459a4eaee] 92a824aec75ad8302e5f546fd2531c8ff87762bfd72e5050b6120a69c4a99baa
+2025-06-05 16:53:42,192 - ERROR - Exception occurred in 5607787d3a3b2c8ded7b12000b96a08ac5fff20e7e4e5ed9b78012ba55ccc566: 17385dba7fd8a51a604db894a9d37376f3b06e75de31f78d186927970baba8d3
+2025-06-05 16:53:42,193 - ERROR - Traceback (most recent call last):
+  File "C:\Users\Telmo Claro\Documents\Projects\FA_SQ_24_25_V1_1\src\database.py", line 62, in create
+    super_admin_user = utils.symmetric_encrypt("super_admin")
+  File "C:\Users\Telmo Claro\Documents\Projects\FA_SQ_24_25_V1_1\src\utils.py", line 26, in symmetric_encrypt
+    from cryptography.fernet import Fernet
+ModuleNotFoundError: No module named 'cryptography'
+
