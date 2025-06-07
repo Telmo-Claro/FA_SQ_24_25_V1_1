@@ -1,7 +1,7 @@
 import database
 from datetime import datetime
 import authenticator
-import utils
+import helper
 import logger
 
 class Ui:
@@ -14,7 +14,7 @@ class Ui:
 
     def landing(self):
         try:
-            utils.cls()
+            helper.cls()
             while True:
                 print(f"Welcome to Urban Mobility!")
                 print(f"To navigate, please enter the numerical value")
@@ -42,7 +42,7 @@ class Ui:
     def landing_super_admin(self, user):
         try:
             while True:
-                utils.cls()
+                helper.cls()
                 print(f"Welcome {user.firstname} {user.lastname}!")
                 print(f"To navigate, please enter the numerical value")
                 print(f"Choose a sub-menu")
@@ -83,8 +83,7 @@ class Ui:
                     role = "Service Engineer"
                 else:
                     print(f"Invalid role selected. Try again.")
-            registration_date = datetime.now()
-            if not self._db.add_user(user, first_name, last_name, username, password, role, registration_date):
+            if not self._db.add_user(user, first_name, last_name, username, password, role):
                     print(f"Sorry, didn't work!")
         except Exception as e:
             self._logger.log_error(e, "SUPER ADMIN USER ADDITION")

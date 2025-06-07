@@ -1,6 +1,6 @@
 import sqlite3
 from pathlib import Path
-import utils
+import helper
 
 class Database:
     def __init__(self, logger, db_name):
@@ -69,9 +69,11 @@ class Database:
         try:
             with sqlite3.connect(self.path) as conn:
                 cursor = conn.cursor()
-                Uname = utils.symmetric_encrypt(Uname)
-                Pword = utils.utils_hash(Pword)
-                query = """INSERT INTO users (first_name, last_name, username, password, user_role, registration_date)
+                Uname = helper.symmetric_encrypt(Uname)
+                Pword = helper.utils_hash(Pword)
+                query = """INSERT INTO users (first_name, last_name, 
+                                              username, password, 
+                                              user_role, registration_date)
                            VALUES (?, ?, ?, ?, ?, ?)"""
                 cursor.execute(query, (Fname, Lname, Uname, Pword, Role, Rdate))
                 cursor.close()
@@ -86,7 +88,7 @@ class Database:
         users = self.get_users()
         to_delete = None
         for user in users:
-            if utils.symmetric_decrypt(user[2]) == username and utils.utils_hash(user[3]) == password:
+            if helper.symmetric_decrypt(user[2]) == username and helper.utils_hash(user[3]) == password:
                 to_delete = user
         try:
             with sqlite3.connect(self.path) as conn:

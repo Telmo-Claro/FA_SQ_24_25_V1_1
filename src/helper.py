@@ -22,7 +22,6 @@ def validate_password(password): # validates the password
     else:
         return False
 
-
 def symmetric_get_key():
     with open("secret.key", "rb") as key_file:
         return key_file.read()
