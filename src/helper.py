@@ -1,3 +1,6 @@
+from cryptography.fernet import Fernet
+
+
 def cls(): # clears the console
     import os
     os.system('cls' if os.name=='nt' else 'clear')
@@ -23,21 +26,19 @@ def validate_password(password): # validates the password
         return False
 
 def symmetric_get_key():
-    with open("secret.key", "rb") as key_file:
+    from pathlib import Path
+    key_path = Path(__file__).parent / "secret.key"
+    with open(key_path, "rb") as key_file:
         return key_file.read()
 
 def symmetric_encrypt(plaintext): # encrypts plaintext with symmetric encryption using Fernet
     key = symmetric_get_key()
-    from cryptography.fernet import Fernet
-    if key is None:
-        key = Fernet.generate_key()
-    f = Fernet(key)
-    encrypted = f.encrypt(plaintext.encode())
-    return encrypted, key
+    engine = Fernet(key)
+    encrypted = engine.encrypt(plaintext.encode())
+    return encrypted
 
 def symmetric_decrypt(encrypted): # decrypts encrypted text with symmetric encryption using Fernet
     key = symmetric_get_key()
-    from cryptography.fernet import Fernet
     engine = Fernet(key)
     decrypted = engine.decrypt(encrypted).decode()
     return decrypted

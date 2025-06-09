@@ -1,0 +1,40 @@
+2025-06-08 22:16:59,224 - INFO - [8e66390792b30692e51e2a8c8cc72d201cf528592c72df8accfe2d9459a4eaee] 725716b6df2a2ce3060b1681ae49712313e3156ab2af1b2ee7585b72b69dc7d5
+2025-06-08 22:16:59,226 - INFO - [8e66390792b30692e51e2a8c8cc72d201cf528592c72df8accfe2d9459a4eaee] 92a824aec75ad8302e5f546fd2531c8ff87762bfd72e5050b6120a69c4a99baa
+2025-06-08 22:16:59,226 - INFO - [8e66390792b30692e51e2a8c8cc72d201cf528592c72df8accfe2d9459a4eaee] 7f80d821a920baa16aca54f9d2816af25ef763dac0e91a14b00abc0f87419976
+2025-06-08 22:16:59,672 - ERROR - Exception occurred in 62d9b02a491b778cf53dabbd22c6ef5b691db9126261ac878e2c236f26213622: b9ad4f599a2515d99b75019f661bd37f31cc53a242fea86bde97100deadf37dd
+2025-06-08 22:16:59,682 - ERROR - Traceback (most recent call last):
+  File "c:\Users\Telmo Claro\Documents\Projects\FA_SQ_24_25_V1_1\src\database.py", line 78, in add_user
+    cursor.execute(query, (Fname, Lname, Uname, Pword, Role, Rdate))
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.ProgrammingError: Error binding parameter 3: type 'tuple' is not supported
+
+2025-06-08 22:17:09,527 - INFO - [8e66390792b30692e51e2a8c8cc72d201cf528592c72df8accfe2d9459a4eaee] e332a6b3f0eb0ca62fc4b03f9a461db6a64486e924df8a8c24e2aca26074a2a2
+2025-06-08 22:17:09,529 - INFO - [8e66390792b30692e51e2a8c8cc72d201cf528592c72df8accfe2d9459a4eaee] db6f6751311f9fdcb04948a67096a5b506522391edde8eaf28496fb140a0cd5a
+2025-06-08 22:17:09,529 - ERROR - Exception occurred in 6af677308c6f8a2dd5d727347615b616bf3d95b6759581f27bfab079e7e9e4d2: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+2025-06-08 22:17:09,564 - ERROR - Traceback (most recent call last):
+  File "C:\Users\Telmo Claro\scoop\apps\python\current\Lib\site-packages\cryptography\fernet.py", line 114, in _get_unverified_token_data
+    data = base64.urlsafe_b64decode(token)
+  File "C:\Users\Telmo Claro\scoop\apps\python\current\Lib\base64.py", line 134, in urlsafe_b64decode
+    return b64decode(s)
+  File "C:\Users\Telmo Claro\scoop\apps\python\current\Lib\base64.py", line 88, in b64decode
+    return binascii.a2b_base64(s, strict_mode=validate)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+binascii.Error: Incorrect padding
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "c:\Users\Telmo Claro\Documents\Projects\FA_SQ_24_25_V1_1\src\ui.py", line 31, in landing
+    sa = auth.auth_super_admin(username, password)
+  File "c:\Users\Telmo Claro\Documents\Projects\FA_SQ_24_25_V1_1\src\authenticator.py", line 12, in auth_super_admin
+    username = helper.symmetric_decrypt(username)
+  File "c:\Users\Telmo Claro\Documents\Projects\FA_SQ_24_25_V1_1\src\helper.py", line 41, in symmetric_decrypt
+    decrypted = engine.decrypt(encrypted).decode()
+                ~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "C:\Users\Telmo Claro\scoop\apps\python\current\Lib\site-packages\cryptography\fernet.py", line 85, in decrypt
+    timestamp, data = Fernet._get_unverified_token_data(token)
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\Telmo Claro\scoop\apps\python\current\Lib\site-packages\cryptography\fernet.py", line 116, in _get_unverified_token_data
+    raise InvalidToken
+cryptography.fernet.InvalidToken
+

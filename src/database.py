@@ -112,3 +112,4 @@ class Database:
             cursor.close()
             self._logger.log_info(f"Successfully retrieved usernames and passwords", "DATABASE")
             return users
+        
