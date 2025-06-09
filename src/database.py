@@ -1,15 +1,26 @@
 import sqlite3
 from pathlib import Path
-import helper
+from helper import Helper
+from datetime import datetime
 
 class Database:
-    def __init__(self, logger, db_name):
-        self._logger = logger
+    def __init__(self, db_name):
         self.db_name = db_name
         self.path = Path(__file__).parent / f"{db_name}.db"
 
+    def load(self):
+        if self.path.exists():
+            return True
+        else:
+            try:
+                self.create()
+                self.add_new_user("Super", "Administrator", "super_admin", "Admin_123?", "Super Administrator",
+                                  datetime.now())
+                return True
+            except:
+                return False
+
     def create(self):
-        self._logger.log_info(f"Creating database", "DATABASE")
         try:
             with sqlite3.connect(self.path) as conn:
                 cursor = conn.cursor()
@@ -59,57 +70,80 @@ class Database:
                     cursor.execute(query)
                 cursor.close()
                 conn.commit()
-                self._logger.log_info("Database tables created successfully", "DATABASE")
-
-        except Exception as e:
-            self._logger.log_error(e, "during data setup")
-
-    def add_user(self, Fname, Lname, Uname, Pword, Role, Rdate):
-        self._logger.log_info(f"Attempting to add new user: {Uname}", "DATABASE")
-        try:
-            with sqlite3.connect(self.path) as conn:
-                cursor = conn.cursor()
-                Uname = helper.symmetric_encrypt(Uname)
-                Pword = helper.utils_hash(Pword)
-                query = """INSERT INTO users (first_name, last_name, 
-                                              username, password, 
-                                              user_role, registration_date)
-                           VALUES (?, ?, ?, ?, ?, ?)"""
-                cursor.execute(query, (Fname, Lname, Uname, Pword, Role, Rdate))
-                cursor.close()
-                self._logger.log_info(f"Successfully added user: {Uname}", "DATABASE")
-                return True
-        except Exception as e:
-            self._logger.log_error(e, "during add user to databse")
+            return True
+        except:
             return False
+
+    def add_new_user(self, first_name, last_name,
+                     username, password, user_role,
+                     registration_date=datetime.now()):
+
+        valid = self.user_exists(username, password)
+        if not valid:
+            try:
+                with sqlite3.connect(self.path) as conn:
+                    cursor = conn.cursor()
+                    username = Helper.symmetric_encrypt(username)
+                    password = Helper.utils_hash(password)
+                    query = """INSERT INTO users (first_name, last_name, 
+                                                  username, password, 
+                                                  user_role, registration_date)
+                               VALUES (?, ?, ?, ?, ?, ?)"""
+                    cursor.execute(query, (first_name, last_name, username, password, user_role, registration_date))
+                    cursor.close()
+                    return True
+            except:
+                return False
+        return None
 
     def delete_user(self, username, password):
-        self._logger.log_info(f"Attempting to delete user: {username}", "DATABASE")
+        valid = self.user_exists(username, password)
         users = self.get_users()
-        to_delete = None
-        for user in users:
-            if helper.symmetric_decrypt(user[2]) == username and helper.utils_hash(user[3]) == password:
-                to_delete = user
-        try:
-            with sqlite3.connect(self.path) as conn:
-                cursor = conn.cursor()
-                query = """DELETE FROM users WHERE username = ? AND password = ?"""
-                cursor.execute(query, (username, password))
-                cursor.close()
-                self._logger.log_info(f"Successfully deleted user: {username}", "DATABASE")
-                return True
-        except Exception as e:
-            self._logger.log_error(e, "during delete user from database")
-            return False
+        if valid:
+            try:
+                with sqlite3.connect(self.path) as conn:
+                    cursor = conn.cursor()
+                    query = """DELETE FROM users WHERE username = ? AND password = ?"""
+                    for user in users:
+                        if Helper.symmetric_decrypt(user[3]) == username and Helper.utils_hash(user[4]) == password:
+                            username = user[3]
+                            password = user[4]
+                    cursor.execute(query, (username, password))
+                    cursor.close()
+                    return True
+            except:
+                return False
+        return None
 
     def get_users(self):
-        self._logger.log_info(f"Attempting to get usernames and passwords", "DATABASE")
         with sqlite3.connect(self.path) as conn:
             cursor = conn.cursor()
             query = """SELECT * FROM users"""
             cursor.execute(query)
             users = cursor.fetchall()
             cursor.close()
-            self._logger.log_info(f"Successfully retrieved usernames and passwords", "DATABASE")
             return users
         
+    def user_exists(self, username, password):
+        with sqlite3.connect(self.path) as conn:
+            cursor = conn.cursor()
+            query = """SELECT * FROM users"""
+            cursor.execute(query)
+            users = cursor.fetchall()
+            for user in users:
+                if Helper.symmetric_decrypt(user[3]) == username and Helper.utils_hash(password) == user[4]:
+                    cursor.close()
+                    return True
+            return False
+
+    def add_traveller_data(self,
+                           first_name, last_name, birthday, gender,
+                           street_name, house_number, zip_code, city,
+                           email_address, mobile_phone, driving_license_number):
+        return
+
+    def add_scooter_data(self,
+                         brand, model, serial_number, top_speed, battery_capacity,
+                         state_of_charge, target_range_soc, location, out_of_service_status,
+                         mileage, last_maintenance_date):
+        return

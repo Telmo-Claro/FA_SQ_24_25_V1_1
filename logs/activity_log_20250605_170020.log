@@ -1,8 +1,0 @@
-2025-06-05 17:00:20,710 - INFO - [8e66390792b30692e51e2a8c8cc72d201cf528592c72df8accfe2d9459a4eaee] 725716b6df2a2ce3060b1681ae49712313e3156ab2af1b2ee7585b72b69dc7d5
-2025-06-05 17:00:20,722 - INFO - [8e66390792b30692e51e2a8c8cc72d201cf528592c72df8accfe2d9459a4eaee] 92a824aec75ad8302e5f546fd2531c8ff87762bfd72e5050b6120a69c4a99baa
-2025-06-05 17:00:20,750 - ERROR - Exception occurred in 5607787d3a3b2c8ded7b12000b96a08ac5fff20e7e4e5ed9b78012ba55ccc566: 4ca1800417ef883aa00703957a628d7ad46ba2f155fb19c8dde52e28011a866e
-2025-06-05 17:00:20,750 - ERROR - Traceback (most recent call last):
-  File "C:\Users\Telmo Claro\Documents\Projects\FA_SQ_24_25_V1_1\src\database.py", line 69, in create
-    cursor.execute(add_super_admin_query, ("Super", "Administrator",
-sqlite3.InterfaceError: Error binding parameter 2 - probably unsupported type.
-
