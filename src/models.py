@@ -29,19 +29,28 @@ class User:
         # System Admin can do it, super admin too but no use
         return
 
-    def view_users(self, database):
+    def view_users(self, database, logger):
         # ToDo
-        if self.role != "Service Engineer":
-            users = database.get_users()
-            for user in users:
-                print(f"{Helper.symmetric_decrypt(user[3])}: {user[5]}")
-        return
+        logger.log_info(f"{self.username}", "viewing users", "User Interface")
+        try:
+            if self.role != "Service Engineer":
+                users = database.get_users()
+                for user in users:
+                    print(f"{Helper.symmetric_decrypt(user[3])}: {user[5]}")
+                return True
+            else:
+                input("Press Enter to return to the previous menu...")
+                return False
+        except Exception as e:
+            logger.log_error(f"{self.username}",e, "during viewing users")
+            return False
 
-    def add_user(self, database):
+    def add_user(self, database, logger):
         # Super Admin can add System Admin and Service Engineer.
         # System Admin can add Service Engineer.
         # Service Engineer can't add anyone.
         try:
+            logger.log_info(f"{self.username}", "Trying to add a new user", "User Interface")
             print("ADD NEW USER")
             print("Please enter the following information:")
 
@@ -62,9 +71,10 @@ class User:
                     "Invalid password. Must be 8-10 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character.")
 
             while True:
+                print("Please select a role:")
                 print("1) System Administrator")
                 print("2) Service Engineer")
-                role_choice = input("Please select a role: ")
+                role_choice = input("> ")
 
                 if role_choice == "1":
                     role = "System Administrator"
@@ -87,18 +97,49 @@ class User:
                     print("You don't have permission to add this user.")
                     input("Press Enter to return to the previous menu...")
 
-            print("Creating new user...")
-            database.add_new_user(first_name, last_name, username, password, role)
-            if database.add_new_user(first_name, last_name, username, password, role):
+            result = database.add_new_user(first_name, last_name, username, password, role)
+            if result:
                 print("User created successfully!")
+                input("Press Enter to return to the previous menu...")
+                return True
             else:
                 print("Failed to create user. Please try again.")
-
-            input("Press Enter to return to the previous menu...")
-
-        except:
+                input("Press Enter to return to the previous menu...")
+                return False
+        except Exception as e:
+            logger.log_error(f"{self.username}",e, "during adding a new user")
             print("An error occurred while adding the user.")
             input("Press Enter to return to the previous menu...")
+            return False
+
+    def delete_user(self, database, logger):
+        try:
+            while True:
+                username = input("Enter the username of the user you want to delete: ")
+                print("Are you sure you want to delete this user? (y/n)")
+                input_choice = input("> ")
+
+                if input_choice == "y":
+                    result = database.database_delete_user(username)
+                    if result:
+                        print("User deleted successfully!")
+                        input("Press Enter to return to the previous menu...")
+                        return True
+                    else:
+                        print("User not found.")
+                        input("Press Enter to return to the previous menu...")
+                        return False
+                elif input_choice == "n":
+                    print("Deletion cancelled.")
+                    break
+                else:
+                    print("Invalid input. Please try again.")
+                    input("Press Enter to return to the previous menu...")
+
+        except Exception as e:
+            logger.log_error(f"{self.username}",e, "during deleting a user")
+            print("An error occurred while deleting the user.")
+            return False
 
     def update_user(self):
         # ToDo

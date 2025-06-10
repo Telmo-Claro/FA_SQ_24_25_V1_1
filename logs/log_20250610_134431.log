@@ -1,0 +1,10 @@
+2025-06-10 13:44:37,149 - INFO - User: super_admin / [User Interface] landing page navigation / Low Risk
+2025-06-10 13:44:39,626 - INFO - User: super_admin / [User Interface] viewing users / Low Risk
+2025-06-10 13:44:39,633 - ERROR - User: super_admin / [during viewing users] Traceback (most recent call last):
+  File "C:\Users\Telmo Claro\Documents\Projects\FA_SQ_24_25_V1_1\src\models.py", line 37, in view_users
+    users = database.get_users()
+  File "C:\Users\Telmo Claro\Documents\Projects\FA_SQ_24_25_V1_1\src\database.py", line 117, in get_users
+    cursor.execute(query)
+    ~~~~~~~~~~~~~~^^^^^^^
+sqlite3.OperationalError: no such table: users
+ / High Risk

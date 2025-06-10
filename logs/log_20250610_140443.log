@@ -1,0 +1,7 @@
+2025-06-10 14:04:48,145 - INFO - User: super_admin / [User Interface] landing page navigation / Low Risk
+2025-06-10 14:04:51,067 - ERROR - User: super_admin / [during landing page navigation] Traceback (most recent call last):
+  File "C:\Users\Telmo Claro\Documents\Projects\FA_SQ_24_25_V1_1\src\user_interface.py", line 88, in landing_super_admin
+    user.delete_user()
+    ~~~~~~~~~~~~~~~~^^
+TypeError: User.delete_user() missing 2 required positional arguments: 'database' and 'logger'
+ / High Risk

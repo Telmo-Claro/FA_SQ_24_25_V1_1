@@ -9,17 +9,10 @@ class Database:
         self.path = Path(__file__).parent / f"{db_name}.db"
 
     def load(self):
-        if self.path.exists():
-            return True
-        else:
-            try:
-                self.create()
-                self.add_new_user("Super", "Administrator", "super_admin", "Admin_123?", "Super Administrator",
-                                  datetime.now())
-                return True
-            except:
-                return False
-
+        self.create()
+        self.add_new_user("Super", "Administrator",
+                          "super_admin", "Admin_123?",
+                          "Super Administrator")
     def create(self):
         try:
             with sqlite3.connect(self.path) as conn:
@@ -78,7 +71,7 @@ class Database:
                      username, password, user_role,
                      registration_date=datetime.now()):
 
-        valid = self.user_exists(username, password)
+        valid = self.user_exists(username)
         if not valid:
             try:
                 with sqlite3.connect(self.path) as conn:
@@ -89,31 +82,30 @@ class Database:
                                                   username, password, 
                                                   user_role, registration_date)
                                VALUES (?, ?, ?, ?, ?, ?)"""
-                    cursor.execute(query, (first_name, last_name, username, password, user_role, registration_date))
+                    cursor.execute(query, (first_name, last_name,
+                                           username, password, user_role,
+                                           registration_date))
                     cursor.close()
                     return True
             except:
                 return False
         return None
 
-    def delete_user(self, username, password):
-        valid = self.user_exists(username, password)
+    def database_delete_user(self, username):
         users = self.get_users()
-        if valid:
-            try:
-                with sqlite3.connect(self.path) as conn:
-                    cursor = conn.cursor()
-                    query = """DELETE FROM users WHERE username = ? AND password = ?"""
-                    for user in users:
-                        if Helper.symmetric_decrypt(user[3]) == username and Helper.utils_hash(user[4]) == password:
-                            username = user[3]
-                            password = user[4]
-                    cursor.execute(query, (username, password))
-                    cursor.close()
-                    return True
-            except:
+        try:
+            with sqlite3.connect(self.path) as conn:
+                cursor = conn.cursor()
+                query = """DELETE FROM users WHERE username = ?"""
+                for user in users:
+                    print(Helper.symmetric_decrypt(user[3]))
+                    if Helper.symmetric_decrypt(user[3]) == username:
+                        cursor.execute(query, (user[3]))
+                        cursor.close()
+                        return True
                 return False
-        return None
+        except:
+            return False
 
     def get_users(self):
         with sqlite3.connect(self.path) as conn:
@@ -124,17 +116,16 @@ class Database:
             cursor.close()
             return users
         
-    def user_exists(self, username, password):
+    def user_exists(self, username):
         with sqlite3.connect(self.path) as conn:
             cursor = conn.cursor()
             query = """SELECT * FROM users"""
             cursor.execute(query)
             users = cursor.fetchall()
             for user in users:
-                if Helper.symmetric_decrypt(user[3]) == username and Helper.utils_hash(password) == user[4]:
-                    cursor.close()
+                if Helper.symmetric_decrypt(user[3]) == username:
                     return True
-            return False
+        return False
 
     def add_traveller_data(self,
                            first_name, last_name, birthday, gender,

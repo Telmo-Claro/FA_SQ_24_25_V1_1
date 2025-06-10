@@ -7,6 +7,7 @@ import platform
 import hashlib
 
 class Helper:
+
     @staticmethod
     def print_header(title):
         """Prints header with custom text"""
@@ -52,3 +53,11 @@ class Helper:
         key = cls.symmetric_get_key()
         engine = Fernet(key)
         return engine.decrypt(encrypted).decode()
+
+    @staticmethod
+    def clear_console():
+        """Clears the console screen across different operating systems"""
+        if platform.system() == "Windows":
+            os.system('cls')
+        else:
+            os.system('clear')  # For Linux and macOS
