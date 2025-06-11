@@ -19,28 +19,25 @@ class Logger():
         self.setup_logging()
         self.database = db
 
+    def get_username(self, user):
+        if hasattr(user, "username"):
+            return user.username
+        elif isinstance(user, str):
+            return user
+        elif user is None:
+            return "Anonymous"
+        else:
+            return str(user)
+
     def log_to_database(self, user, activity_description, additional_info, suspicious_level):
-        """Log activity to the database"""
-        try:
-            with self.database.get_connection() as conn:
-                cursor = conn.cursor()
-                query = """INSERT INTO logger (date, time, username, activity_description, additional_info, suspicious_level)
-                           VALUES (?, ?, ?, ?, ?, ?)"""
-                cursor.execute(query, (
-                    datetime.now().strftime("%Y-%m-%d"),
-                    datetime.now().strftime("%H:%M:%S"),
-                    user.username,
-                    activity_description,
-                    additional_info,
-                    suspicious_level
-                ))
-                conn.commit()
-                cursor.close()
-                return True
-        except Exception as e:
-            logging.error(f"Failed to log activity to database: {e}")
-            logging.error(traceback.format_exc())
-            return False
+        username = self.get_username(user)
+        date = datetime.now().strftime("%Y-%m-%d")
+        time = datetime.now().strftime("%H:%M:%S")
+        username = Helper.symmetric_encrypt(username)
+        activity_description = Helper.symmetric_encrypt(activity_description)
+        additional_info = Helper.symmetric_encrypt(additional_info)
+        self.database.add_log(date, time, username, activity_description, additional_info, suspicious_level)
+        
     def setup_logging(self): # create a log file with datetime in the filename
         logs_dir = Path(__file__).parent.parent / "logs"
         logs_dir.mkdir(exist_ok=True)  # Create a logs directory if it doesn't exist
@@ -51,33 +48,40 @@ class Logger():
             filemode='w',
             format="%(asctime)s - %(levelname)s - %(message)s")
 
-    def log_info(self, user, activity_description, additional_info): # for normal activity
+    def log_info(self, user, activity_description, additional_info=""): # for normal activity
         """Log information messages"""
+        username = self.get_username(user)
         self.log_to_database(
-            user=Helper.symmetric_encrypt(user.username),
-            activity_description=Helper.symmetric_encrypt(activity_description),
-            additional_info=Helper.symmetric_encrypt(additional_info),
+            user,
+            activity_description,
+            additional_info,
             suspicious_level="Low Risk"
         )
+        logging.info(f"User activity logged: {username}, {activity_description}, {additional_info}, Low Risk")
 
-    def log_warning(self, user, activity_description, additional_info): # casual warnings
+    def log_warning(self, user, activity_description, additional_info=""): # casual warnings
         """Log warning messages"""
+        username = self.get_username(user)
         self.log_to_database(
-            user=Helper.symmetric_encrypt(user.username),
-            activity_description=Helper.symmetric_encrypt(activity_description),
-            additional_info=Helper.symmetric_encrypt(additional_info),
+            user,
+            activity_description,
+            additional_info,
             suspicious_level="Medium Risk"
         )
+        logging.warning(f"User activity logged: {username}, {activity_description}, {additional_info}, Medium Risk")
 
-    def log_exceptions(self, user, activity_description, additional_info: Exception):
+    def log_error(self, user, activity_description, additional_info: Exception):
         """Log an exception with optional context"""
-        returned_error = traceback.format_exc()
+        username = self.get_username(user)
+        error_message = traceback.format_exc()      
+
         self.log_to_database(
-            user=Helper.symmetric_encrypt(user.username),
-            activity_description=Helper.symmetric_encrypt(activity_description),
-            additional_info=Helper.symmetric_encrypt(additional_info),
+            user,
+            activity_description,
+            error_message,
             suspicious_level="High Risk"
         )
+        logging.error(f"User activity logged: {username}, {activity_description}, {additional_info}, High Risk")
 
 """
 Log regular activity

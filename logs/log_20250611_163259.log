@@ -1,7 +1,0 @@
-2025-06-11 16:33:09,457 - ERROR - Failed to log activity to database: 'Database' object has no attribute 'get_connection'
-2025-06-11 16:33:09,464 - ERROR - Traceback (most recent call last):
-  File "c:\Users\Telmo Claro\Documents\Projects\FA_SQ_24_25_V1_1\src\logger.py", line 25, in log_to_database
-    with self.database.get_connection() as conn:
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-AttributeError: 'Database' object has no attribute 'get_connection'
-

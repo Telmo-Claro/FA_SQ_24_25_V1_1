@@ -1,10 +1,10 @@
 import user_interface as ui
-import logger
-import database
+from logger import Logger
+from database import Database
 
 if __name__ == "__main__":
-    db = database.Database("urban_mobility")
+    db = Database("urban_mobility")
     db.load()
-    log = logger.Logger(db) # initialize the logger
+    log = Logger(db) # initialize the logger
     main_ui = ui.Ui(log, db) # initializes the main UI
     main_ui.landing() # start the application with the landing page

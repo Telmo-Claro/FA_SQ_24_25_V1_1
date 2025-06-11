@@ -8,22 +8,21 @@ class Ui:
 
     def landing(self):
         while True:
-            Helper.clear_console()
             print("URBAN MOBILITY SYSTEM")
             print("Welcome to Urban Mobility!")
             print("1) Login")
-            print("2) Exit")
-            choice = input("Please enter a number from the menu above: ")
+            print("Q) Exit")
+            choice = input("> ").strip().upper()
             print("")
 
-            if choice == "2":
+            if choice == "Q":
                 quit()
             elif choice == "1":
                 while True:
                     print("LOGIN")
                     print("If you wish to cancel, enter 'exit' as the username.")
-                    username = input("Username: ")
-                    password = input("Password: ")
+                    username = input("Username: ").lower().strip()
+                    password = input("Password: ").strip()
                     print("")
 
                     if username == "exit":
@@ -34,9 +33,8 @@ class Ui:
                     if user is False or user is None:
                         print("Wrong username or password. Try again!")
                         input("Press Enter to continue...")
-                        continue
+                        self.landing()
                     elif user.role == "Super Administrator":
-                        print("Login successful! Redirecting...")
                         self.landing_super_admin(user)
                     elif user.role == "System Administrator":
                         print("You don't exist... yet")
@@ -54,125 +52,252 @@ class Ui:
                 input("Press Enter to continue...")
 
     def landing_super_admin(self, user):
+        self._logger.log_info(user=user,
+                              activity_description="Accessed Super Administrator Dashboard",
+                              additional_info="")
         try:
             while True:
                 print(f"SUPER ADMINISTRATOR DASHBOARD")
                 print(f"Welcome, {user.firstname} {user.lastname}!")
-                print("1) Users")
-                print("2) Travellers")
-                print("3) Scooters")
-                print("4) System Services")
-                print("5) Logout")
-                choice = input("> ")
+                print("1) User Management")
+                print("2) Backup Management")
+                print("3) Data Management")
+                print("Q) Logout")
+                choice = input("> ").strip().lower()
                 print("")
 
-                if choice == "5":
+                if choice == "q":
                     self.landing()
                 elif choice == "1":
-                    while True:
-                        print("USER MANAGEMENT")
-                        print(f"1) View Users")
-                        print(f"2) Add User")
-                        print(f"3) Delete User")
-                        print(f"4) Update User")
-                        print(f"5) Back")
-                        choice = input("> ")
-                        print("")
-
-                        if choice == "1":
-                            if user.view_users(self._db, self._logger):
-                                input("Press Enter to continue...")
-                            else:
-                                print("Failed to view users. Please try again.")
-                        elif choice == "2":
-                            if user.add_user(self._db, self._logger):
-                                print("User added successfully!")
-                            else:
-                                print("Failed to add user. Please try again.")
-                        elif choice == "3":
-                            if user.delete_user(self._db, self._logger):
-                                print("User deleted successfully!")
-                            else:
-                                print("Failed to delete user. Please try again.")
-                        elif choice == "4":
-                            if user.update_user(self._db, self._logger):
-                                print("User updated successfully!")
-                            else:
-                                print("Failed to update user. Please try again.")
-                        elif choice == "5":
-                            break
-                        else:
-                            print("Invalid option. Please try again.")
-                            input("Press Enter to continue...")
-
+                    self.user_management_super_admin(user)
                 elif choice == "2":
-                    while True:
-                        Helper.clear_console()
-                        print("TRAVELLER MANAGEMENT")
-                        print(f"1) View Travellers")
-                        print(f"2) Add Traveller")
-                        print(f"3) Update Traveller")
-                        print(f"4) Delete Traveller")
-                        print(f"5) Back")
-                        choice = input("> ")
-
-                        if choice == "1":
-                            print("Feature not yet implemented")
-                            input("Press Enter to continue...")
-                        elif choice == "2":
-                            print("Feature not yet implemented")
-                            input("Press Enter to continue...")
-                        elif choice == "3":
-                            print("Feature not yet implemented")
-                            input("Press Enter to continue...")
-                        elif choice == "4":
-                            print("Feature not yet implemented")
-                            input("Press Enter to continue...")
-                        elif choice == "5":
-                            break
-                        else:
-                            print("Invalid option. Please try again.")
-                            input("Press Enter to continue...")
-
+                    self.backup_management_super_admin(user)
                 elif choice == "3":
-                    while True:
-                        Helper.clear_console()
-                        print("SCOOTER MANAGEMENT")
-                        print(f"1) View Scooters")
-                        print(f"2) Add Scooter")
-                        print(f"3) Update Scooter")
-                        print(f"4) Delete Scooter")
-                        print(f"5) Back")
-                        choice = input("> ")
-                        if choice == "1":
-                            print("Feature not yet implemented")
-                            input("Press Enter to continue...")
-                        elif choice == "2":
-                            print("Feature not yet implemented")
-                            input("Press Enter to continue...")
-                        elif choice == "3":
-                            print("Feature not yet implemented")
-                            input("Press Enter to continue...")
-                        elif choice == "4":
-                            print("Feature not yet implemented")
-                            input("Press Enter to continue...")
-                        elif choice == "5":
-                            break
-                        else:
-                            print("Invalid option. Please try again.")
-                            input("Press Enter to continue...")
-                elif choice == "4":
-                    while True:
-                        Helper.clear_console()
-                        print("SYSTEM SERVICES")
-                        print("Feature not yet implemented")
-                        input("Press Enter to continue...")
+                    self.data_management_super_admin(user)
                 else:
                     print("Invalid option. Please try again.")
                     input("Press Enter to continue...")
 
         except Exception as e:
-            self._logger.error(f"An error occurred in the super admin dashboard: {e}")
+            self._logger.log_error(user=user,
+                                  activity_description="An unexpected error occurred in the Super Administrator Dashboard",
+                                  additional_info=e)
             print("An unexpected error occurred. Please try again later.")
             input("Press Enter to continue...")
             self.landing()
+
+    def user_management_super_admin(self, user):
+        self._logger.log_info(user=user,
+                              activity_description="Accessed User Management",
+                              additional_info="")
+        try:
+            while True:
+                print("================= USER MANAGEMENT =================")
+                print("================= System Administrator =================")
+                print(f"1) Add new System Administrator")
+                print(f"2) Modify or update System Administrator")
+                print(f"3) Delete System Administrator")
+                print(f"4) Reset System Administrator password (temporary)")
+                print("================= Service Engineer =================")
+                print(f"5) Add new Service Engineer")
+                print(f"6) Modify or update Service Engineer")
+                print(f"7) Delete Service Engineer")
+                print(f"8) Reset Service Engineer password (temporary)")
+                print("================= Other =================")
+                print(f"9) View Users")
+                print(f"Q) Back")
+                choice = input("> ").strip().lower()
+                print("")
+
+                if choice == "q":
+                    break
+                elif choice == "1":
+                    if user.add_new_system_admin(self._db, self._logger):
+                        print("System Administrator added successfully!")
+                        print("")
+                    else:
+                        print("Failed to add System Administrator. Please try again.")
+                        print("")
+                elif choice == "2":
+                    if user.update_system_admin(self._db, self._logger):
+                        print("User updated successfully!")
+                        print("")
+                    else:
+                        print("Failed to update user. Please try again.")
+                        print("")
+                elif choice == "3":
+                    if user.delete_system_admin(self._db, self._logger):
+                        print("User deleted successfully!")
+                        print("")
+                    else:
+                        print("Failed to delete user. Please try again.")
+                        print("")
+                elif choice == "4":
+                    if user.reset_system_admin_password(self._db, self._logger):
+                        print("User updated successfully!")
+                        print("")
+                    else:
+                        print("Failed to update user. Please try again.")
+                        print("")
+                elif choice == "5":
+                    if user.add_new_service_engineer(self._db, self._logger):
+                        print("Service Engineer added successfully!")
+                        print("")
+                    else:
+                        print("Failed to add Service Engineer. Please try again.")
+                        print("")
+                elif choice == "6":
+                    if user.update_service_engineer(self._db, self._logger):
+                        print("Service Engineer updated successfully!")
+                        print("")
+                    else:
+                        print("Failed to update Service Engineer. Please try again.")
+                        print("")
+                elif choice == "7":
+                    if user.delete_service_engineer(self._db, self._logger):
+                        print("Service Engineer deleted successfully!")
+                        print("")
+                    else:
+                        print("Failed to delete Service Engineer. Please try again.")
+                        print("")
+                elif choice == "8":
+                    if user.reset_service_engineer_password(self._db, self._logger):
+                        print("Service Engineer password reset successfully!")
+                        print("")
+                    else:
+                        print("Failed to reset Service Engineer password. Please try again.")
+                        print("")
+                elif choice == "9":
+                    if user.view_users(self._db, self._logger):
+                        input("Press Enter to continue...")
+                    else:
+                        print("Failed to view users. Please try again.")
+                        print("")
+                else:
+                    print("Invalid option. Please try again.")
+                    input("Press Enter to continue...")
+        except Exception as e:
+            self._logger.log_error(user=user,
+                                  activity_description="An unexpected error occurred in User Management",
+                                  additional_info=e)
+            print("An unexpected error occurred. Please try again later.")
+            input("Press Enter to continue...")
+            self.landing_super_admin(user)
+
+    def backup_management_super_admin(self, user):
+        while True:
+            print("================= BACKUP MANAGEMENT =================")
+            print(f"1) Create system backup")
+            print(f"2) Restore system backup")
+            print(f"3) Generate one-use restore code")
+            print(f"4) Revoke one-use restore code")
+            print(f"Q) Back")
+            choice = input("> ").strip().lower()
+            print("")
+
+            if choice == "q":
+                break
+            elif choice == "1":
+                if user.create_system_backup(self._db, self._logger):
+                    print("System backup created successfully!")
+                else:
+                    print("Feature not yet implemented")
+                input("Press Enter to continue...")
+            elif choice == "2":
+                if user.restore_system_backup(self._db, self._logger):
+                    print("System backup restored successfully!")
+                else:
+                    print("Feature not yet implemented")
+                input("Press Enter to continue...")
+            elif choice == "3":
+                if user.generate_one_use_restore_code(self._db, self._logger):
+                    print("One-use restore code generated successfully!")
+                else:
+                    print("Feature not yet implemented")
+                input("Press Enter to continue...")
+            elif choice == "4":
+                if user.revoke_one_use_restore_code(self._db, self._logger):
+                    print("One-use restore code revoked successfully!")
+                else:
+                    print("Feature not yet implemented")
+                input("Press Enter to continue...")
+            else:
+                print("Invalid option. Please try again.")
+                input("Press Enter to continue...")   
+
+    def data_management_super_admin(self, user):
+      while True:
+            print("================= DATA MANAGEMENT =================")
+            print(f"1) Add new scooter")
+            print(f"2) Modify or update scooter")
+            print(f"3) Delete scooter")
+            print(f"4) Search scooter")
+            print(f"5) Add new traveller")
+            print(f"6) Modify or update traveller")
+            print(f"7) Delete traveller")
+            print(f"8) Search traveller")
+            print(f"9) View logs")
+            print(f"Q) Back")
+            choice = input("> ").strip().lower()
+            print("")
+
+            if choice == "q":
+                break
+            elif choice == "1":
+                if user.add_scooter(self._db, self._logger):
+                    print("Scooter added successfully!")
+                else:
+                    print("Feature not yet implemented")
+                input("Press Enter to continue...")
+            elif choice == "2":
+                if user.update_scooter(self._db, self._logger):
+                    print("Scooter updated successfully!")
+                else:
+                    print("Feature not yet implemented")
+                input("Press Enter to continue...")
+            elif choice == "3":
+                if user.delete_scooter(self._db, self._logger):
+                    print("Scooter deleted successfully!")
+                else:
+                    print("Feature not yet implemented")
+                input("Press Enter to continue...")
+            elif choice == "4":
+                if user.search_scooter(self._db, self._logger):
+                    print("Scooter found!")
+                else:
+                    print("Feature not yet implemented")
+                input("Press Enter to continue...")
+            elif choice == "5":
+                if user.add_traveller(self._db, self._logger):
+                    print("Traveller added successfully!")
+                else:
+                    print("Feature not yet implemented")
+                input("Press Enter to continue...")
+            elif choice == "6":
+                if user.update_traveller(self._db, self._logger):
+                    print("Traveller updated successfully!")
+                else:
+                    print("Feature not yet implemented")
+                input("Press Enter to continue...")
+            elif choice == "7":
+                if user.delete_traveller(self._db, self._logger):
+                    print("Traveller deleted successfully!")
+                else:
+                    print("Feature not yet implemented")
+                input("Press Enter to continue...")
+            elif choice == "8":
+                if user.search_traveller(self._db, self._logger):
+                    print("Traveller found!")
+                else:
+                    print("Feature not yet implemented")
+                input("Press Enter to continue...")
+            elif choice == "9":
+                if user.view_logs(self._db, self._logger):
+                    print("Logs viewed successfully!")
+                else:
+                    print("Feature not yet implemented")
+                input("Press Enter to continue...")
+            else:
+                print("Invalid option. Please try again.")
+                input("Press Enter to continue...")
+    

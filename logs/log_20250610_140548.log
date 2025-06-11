@@ -1,9 +1,0 @@
-2025-06-10 14:05:57,390 - INFO - User: super_admin / [User Interface] landing page navigation / Low Risk
-2025-06-10 14:06:04,802 - ERROR - User: super_admin / [during deleting a user] Traceback (most recent call last):
-  File "C:\Users\Telmo Claro\Documents\Projects\FA_SQ_24_25_V1_1\src\models.py", line 123, in delete_user
-    result = database.database_delete_user(username)
-  File "C:\Users\Telmo Claro\Documents\Projects\FA_SQ_24_25_V1_1\src\database.py", line 95, in database_delete_user
-    valid = self.user_exists(username)
-TypeError: Database.user_exists() missing 1 required positional argument: 'password'
- / High Risk
-2025-06-10 14:06:07,559 - INFO - User: super_admin / [User Interface] viewing users / Low Risk

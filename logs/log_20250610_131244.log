@@ -1,8 +1,0 @@
-2025-06-10 13:12:46,597 - ERROR - User: None / [AUTH] Traceback (most recent call last):
-  File "C:\Users\Telmo Claro\Documents\Projects\FA_SQ_24_25_V1_1\src\authenticator.py", line 14, in auth_user
-    users = self._db.get_users()
-  File "C:\Users\Telmo Claro\Documents\Projects\FA_SQ_24_25_V1_1\src\database.py", line 122, in get_users
-    cursor.execute(query)
-    ~~~~~~~~~~~~~~^^^^^^^
-sqlite3.OperationalError: no such table: users
- / High Risk
