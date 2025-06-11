@@ -2,6 +2,7 @@ import sqlite3
 from pathlib import Path
 from helper import Helper
 from datetime import datetime
+from models import User
 
 class Database:
     def __init__(self, db_name):
@@ -13,6 +14,7 @@ class Database:
         self.add_new_user("Super", "Administrator",
                           "super_admin", "Admin_123?",
                           "Super Administrator")
+        
     def create(self):
         try:
             with sqlite3.connect(self.path) as conn:
@@ -58,6 +60,15 @@ class Database:
                         registration_date DATE
                     )""",
 
+                    """CREATE TABLE IF NOT EXISTS logger (
+                        id INTEGER PRIMARY KEY,
+                        date TEXT,
+                        time TEXT,
+                        username TEXT,
+                        activity_description TEXT,
+                        additional_info TEXT,
+                        suspicious_level TEXT
+                    )"""
                     ]
                 for query in queries:
                     cursor.execute(query)
@@ -66,6 +77,15 @@ class Database:
             return True
         except:
             return False
+
+    def get_users(self):
+        with sqlite3.connect(self.path) as conn:
+            cursor = conn.cursor()
+            query = """SELECT * FROM users"""
+            cursor.execute(query)
+            users = cursor.fetchall()
+            cursor.close()
+            return users
 
     def add_new_user(self, first_name, last_name,
                      username, password, user_role,
@@ -89,42 +109,59 @@ class Database:
                     return True
             except:
                 return False
-        return None
+        return False
 
     def database_delete_user(self, username):
-        users = self.get_users()
         try:
             with sqlite3.connect(self.path) as conn:
                 cursor = conn.cursor()
-                query = """DELETE FROM users WHERE username = ?"""
+                users = self.get_users()
                 for user in users:
-                    print(Helper.symmetric_decrypt(user[3]))
                     if Helper.symmetric_decrypt(user[3]) == username:
-                        cursor.execute(query, (user[3]))
-                        cursor.close()
+                        query = """DELETE FROM users WHERE username = ?"""
+                        cursor.execute(query, (user[3],))
+                        conn.commit()
                         return True
                 return False
         except:
             return False
 
-    def get_users(self):
+    def return_user(self, username):
+        users = self.get_users()
+        for user in users:
+            if Helper.symmetric_decrypt(user[3]) == username:
+                return User(
+                    first_name=user[1],
+                    last_name=user[2],
+                    username=Helper.symmetric_decrypt(user[3]),
+                    password=user[4],
+                    role=user[5],
+                    registration_date=user[6]
+                )
+        return None
+
+    def update_user(self, user_to_update, first_name, last_name, username, password):
         with sqlite3.connect(self.path) as conn:
+            users = self.get_users()
             cursor = conn.cursor()
-            query = """SELECT * FROM users"""
-            cursor.execute(query)
-            users = cursor.fetchall()
-            cursor.close()
-            return users
-        
-    def user_exists(self, username):
-        with sqlite3.connect(self.path) as conn:
-            cursor = conn.cursor()
-            query = """SELECT * FROM users"""
-            cursor.execute(query)
-            users = cursor.fetchall()
             for user in users:
                 if Helper.symmetric_decrypt(user[3]) == username:
+                    query = """UPDATE users 
+                                SET first_name = ?, last_name = ?, username = ?, password = ? 
+                                WHERE username = ?"""
+                    username_encrypted = Helper.symmetric_encrypt(username)
+                    password_hashed = Helper.utils_hash(password)
+                    cursor.execute(query, (first_name, last_name, username_encrypted, password_hashed, user_to_update.id))
+                    conn.commit()
+                    cursor.close()
                     return True
+        return False
+        
+    def user_exists(self, username):
+        users = self.get_users()
+        for user in users:
+            if Helper.symmetric_decrypt(user[3]) == username:
+                return True
         return False
 
     def add_traveller_data(self,

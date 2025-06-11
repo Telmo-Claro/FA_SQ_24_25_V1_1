@@ -16,7 +16,6 @@ class Authenticator:
             for user in users:
                 if Helper.symmetric_decrypt(user[3]) == username and user[4] == hashed_password:
                     return models.User(user[1], user[2], user[3], user[4], user[5], user[6])
-            return None
+            return False
         except Exception as e:
-            self._logger.log_error("None", e, "AUTH")
-            return None
+            return False
