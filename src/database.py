@@ -14,7 +14,7 @@ class Database:
     def load(self):
         self.create()
         self.add_user("Super", "Administrator",
-                          "super_admin", "Admin_123?",
+                          Helper.symmetric_encrypt("super_admin"), Helper.utils_hash("Admin_123?"),
                           "Super Administrator")
         
     def create(self):
@@ -98,8 +98,6 @@ class Database:
             try:
                 with sqlite3.connect(self.path) as conn:
                     cursor = conn.cursor()
-                    username = Helper.symmetric_encrypt(username)
-                    password = Helper.utils_hash(password)
                     query = """INSERT INTO users (first_name, last_name, 
                                                   username, password, 
                                                   user_role, registration_date)
@@ -114,57 +112,60 @@ class Database:
                 return False
         return False
 
-    def database_delete_user(self, username):
+    def delete_user(self, username):
         try:
             with sqlite3.connect(self.path) as conn:
                 cursor = conn.cursor()
-                users = self.get_users()
-                for user in users:
-                    if Helper.symmetric_decrypt(user[3]) == username:
-                        query = """DELETE FROM users WHERE username = ?"""
-                        cursor.execute(query, (user[3],))
-                        conn.commit()
-                        return True
-                return False
-        except:
+                query = """DELETE FROM users WHERE username = ?"""
+                cursor.execute(query, (username,))
+                conn.commit()
+                cursor.close()
+                return True
+        except Exception as e:
+            print(e)
             return False
 
     def return_user(self, username):
         users = self.get_users()
         for user in users:
-            if Helper.symmetric_decrypt(user[3]) == username:
+            if user[3] == username:
                 return User(
                     first_name=user[1],
                     last_name=user[2],
-                    username=Helper.symmetric_decrypt(user[3]),
+                    username=user[3],
                     password=user[4],
                     role=user[5],
                 )
         return False
 
     def update_user(self, current_username, first_name, last_name, username, password):
-        with sqlite3.connect(self.path) as conn:
-            users = self.get_users()
-            cursor = conn.cursor()
-            for user in users:
-                if Helper.symmetric_decrypt(user[3]) == current_username:
-                    query = """UPDATE users 
-                                SET first_name = ?, last_name = ?, username = ?, password = ? 
-                                WHERE username = ?"""
-                    username_encrypted = Helper.symmetric_encrypt(username)
-                    password_hashed = Helper.utils_hash(password)
-                    cursor.execute(query, (first_name, last_name, username_encrypted, password_hashed, user[3]))
-                    conn.commit()
-                    cursor.close()
-                    return True
-        return False
+        try:
+            with sqlite3.connect(self.path) as conn:
+                cursor = conn.cursor()
+                query = """UPDATE users 
+                            SET first_name = ?, last_name = ?, username = ?, password = ? 
+                            WHERE username = ?"""
+
+                cursor.execute(query, (first_name, last_name, username, password, current_username))
+                conn.commit()
+                cursor.close()
+                return True
+        except Exception as e:
+            print(e)
+            return False
         
     def user_exists(self, username):
-        users = self.get_users()
-        for user in users:
-            if Helper.symmetric_decrypt(user[3]) == username:
-                return True
-        return False
+        try:
+            with sqlite3.connect(self.path) as conn:
+                cursor = conn.cursor()
+                query = "SELECT * FROM users WHERE username = ?"
+                cursor.execute(query, (username,))
+                user = cursor.fetchone()
+                cursor.close()
+                return user is not None
+        except Exception as e:
+            print(e)
+            return False
 
     def add_traveller_data(self,
                            first_name, last_name, birthday, gender,

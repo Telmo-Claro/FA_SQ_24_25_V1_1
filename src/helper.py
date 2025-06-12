@@ -2,9 +2,10 @@ from cryptography.fernet import Fernet
 from pathlib import Path
 import re
 import os
-import subprocess
 import platform
 import hashlib
+import string
+import random
 
 class Helper:
 
@@ -40,10 +41,21 @@ class Helper:
             print("Password must be 12-30 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character.")
             password = input("Please enter a valid password: ")
         return password
+    
+    @staticmethod
+    def random_password_generator(length=12):
+        """Generate a random password that matches the security regex"""
+        password_regex = re.compile(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[~!@#$%&_\-+=`|\\(){}[\]:\;\'<>,\.\?/])[A-Za-z\d~!@#$%&_\-+=`|\\(){}[\]:\;\'<>,\.\?/]{12,30}$')
+        characters = string.ascii_letters + string.digits + string.punctuation
+
+        while True:
+            password = ''.join(random.choice(characters) for _ in range(length))
+            if password_regex.match(password):
+                return password
 
     @staticmethod
     def symmetric_get_key():
-        """Gets the encryption key from file"""
+        """Gets the encryption key from a file"""
         key_path = Path(__file__).parent / "secret.key"
         with open(key_path, "rb") as key_file:
             return key_file.read()

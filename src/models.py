@@ -14,8 +14,10 @@ class User:
                 self.username = username
             else:
                 raise ValueError(f"Invalid username: {username}. Must be 8-10 characters long, start with a letter or underscore, and contain only letters, numbers, underscores, apostrophes, and periods.")
+            self.username = Helper.symmetric_encrypt(username)
             if Helper.validate_password(password):
-                self.password = password
+                hashed_password = Helper.utils_hash(password)
+                self.password = hashed_password
             else:
                 raise ValueError(f"Invalid password: {password}. Must be 12-30 characters long, contain at least one uppercase letter, one lowercase letter, one digit, and one special character.")
             self.role = role
@@ -32,7 +34,7 @@ class User:
                 print("USER LIST")
                 print("Username - Role")
                 for user in users:
-                    print(f"{Helper.symmetric_decrypt(user[3])}: {user[5]}")
+                    print(f"{Helper.symmetric_decrypt(user[3])} - {user[5]}")
                 print("")
                 logger.log_info(self, "Viewed users", "")
                 return True
@@ -56,14 +58,16 @@ class User:
                 confirm = input("Confirm (Y/N): ").strip().upper()
                 if confirm == "Y":
                     # Add the new user to the database
+                    encrypted_username = Helper.symmetric_encrypt(username)
+                    hashed_password = Helper.utils_hash(password)
                     database.add_user(first_name, last_name,
-                     username, password, user_role)
+                     encrypted_username, hashed_password, user_role)
                     logger.log_info(
                         user=self,
                         activity_description="New System Administrator added",
-                        additional_info=f"Username: {username}, Role: {user_role}"
+                        additional_info=f"Username: {encrypted_username}, Role: {user_role}"
                     )
-                    logger.log_info(self, f"Added {username}", "System Administrator")
+                    logger.log_info(self, f"Added {encrypted_username}", "System Administrator")
                     return True
                 elif confirm == "N":
                     print("User creation cancelled.")
@@ -90,7 +94,9 @@ class User:
                 confirm = input("Confirm (Y/N): ").strip().upper()
                 if confirm == "Y":
                     # Update the user in the database
-                    database.update_user(current_username, first_name, last_name, username, password)
+                    encrypted_username = Helper.symmetric_encrypt(username)
+                    hashed_password = Helper.utils_hash(password)
+                    database.update_user(current_username, first_name, last_name, encrypted_username, hashed_password)
                     logger.log_info(self, "Updated a system admin", f"User: {username}")
                     return True
                 elif confirm == "N":
@@ -112,7 +118,8 @@ class User:
                 confirm = input("Confirm (Y/N): ").strip().upper()
                 if confirm == "Y":
                     # Add the new user to the database
-                    database.database_delete_user(username)
+                    encrypted_username = Helper.symmetric_encrypt(username)
+                    database.delete_user(encrypted_username)
                     logger.log_info(
                         user=self,
                         activity_description="System Administrator deleted",
@@ -134,6 +141,12 @@ class User:
         # Super Admin can reset System Admin password.
         # System Admin can't reset System Admin password.
         # Service Engineer can't reset System Admin password.
+        choice = ""
+        while choice not in ["back"]:
+            print("Please enter the username of the System Adminsitrator you wish to change it's password:")
+            print("Otherwhise, enter 'back' to go back")
+            choice = input("> ").lower().strip()
+
         return
     
     def add_new_service_engineer(self, database, logger):
@@ -150,8 +163,10 @@ class User:
                 confirm = input("Confirm (Y/N): ").strip().upper()
                 if confirm == "Y":
                     # Add the new user to the database
+                    encrypted_username = Helper.symmetric_encrypt(username)
+                    hashed_password = Helper.utils_hash(password)
                     database.add_user(first_name, last_name,
-                     username, password, user_role)
+                     encrypted_username, password, user_role)
                     logger.log_info(
                         user=self,
                         activity_description="New Service Engineer added",

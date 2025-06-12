@@ -1,6 +1,9 @@
 import authenticator
 from helper import Helper
 
+print("Starting user interface...")
+print("")
+
 class Ui:
     def __init__(self, logger, database):
         self._logger = logger
@@ -8,8 +11,8 @@ class Ui:
 
     def landing(self):
         while True:
-            print("URBAN MOBILITY SYSTEM")
-            print("Welcome to Urban Mobility!")
+            print("================= URBAN MOBILITY SYSTEM =================")
+            print("===============  Welcome to Urban Mobility! =============")
             print("1) Login")
             print("Q) Exit")
             choice = input("> ").strip().upper()
@@ -18,37 +21,42 @@ class Ui:
             if choice == "Q":
                 quit()
             elif choice == "1":
-                while True:
-                    print("LOGIN")
-                    print("If you wish to cancel, enter 'exit' as the username.")
-                    username = input("Username: ").lower().strip()
-                    password = input("Password: ").strip()
-                    print("")
-
-                    if username == "exit":
-                        break
-                    auth = authenticator.Authenticator(self._logger, self._db)
-                    user = auth.auth_user(username, password)
-                    
-                    if user is False or user is None:
-                        print("Wrong username or password. Try again!")
-                        input("Press Enter to continue...")
-                        self.landing()
-                    elif user.role == "Super Administrator":
-                        self.landing_super_admin(user)
-                    elif user.role == "System Administrator":
-                        print("You don't exist... yet")
-                        input("Press Enter to continue...")
-                        break
-                    elif user.role == "Service Engineer":
-                        print("You don't exist... yet")
-                        input("Press Enter to continue...")
-                        break
-                    else:
-                        print("Wrong username or password. Try again!")
-                        input("Press Enter to continue...")
+                self.login()
             else:
                 print("Wrong input! Try again!")
+                input("Press Enter to continue...")
+
+    def login(self):
+        while True:
+            print("LOGIN")
+            print("If you wish to cancel, enter 'exit' as the username.")
+            username = input("Username: ").lower().strip()
+            password = input("Password: ").strip()
+            encrypted_username = Helper.symmetric_encrypt(username)
+            hashed_password = Helper.utils_hash(password)
+            print("")
+
+            if Helper.symmetric_decrypt(encrypted_username) == "exit":
+                break
+            auth = authenticator.Authenticator(self._logger, self._db)
+            user = auth.auth_user(encrypted_username, hashed_password)
+            
+            if user is False or user is None:
+                print("Wrong username or password. Try again!")
+                input("Press Enter to continue...")
+                self.landing()
+            elif user.role == "Super Administrator":
+                self.landing_super_admin(user)
+            elif user.role == "System Administrator":
+                print("You don't exist... yet")
+                input("Press Enter to continue...")
+                break
+            elif user.role == "Service Engineer":
+                print("You don't exist... yet")
+                input("Press Enter to continue...")
+                break
+            else:
+                print("Wrong username or password. Try again!")
                 input("Press Enter to continue...")
 
     def landing_super_admin(self, user):
@@ -114,6 +122,7 @@ class Ui:
                 elif choice == "1":
                     if user.add_new_system_admin(self._db, self._logger):
                         print("System Administrator added successfully!")
+                        input("Press any key to continue...")
                         print("")
                     else:
                         print("Failed to add System Administrator. Please try again.")
