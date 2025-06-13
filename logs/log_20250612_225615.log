@@ -1,0 +1,5 @@
+2025-06-12 22:56:20,815 - INFO - User activity logged: Super Admin, Logged in, , Low Risk
+2025-06-12 22:56:20,823 - INFO - User activity logged: super_admin, Accessed Super Administrator Dashboard, , Low Risk
+2025-06-12 22:56:25,207 - INFO - User activity logged: super_admin, Accessed User Management, , Low Risk
+2025-06-12 22:56:26,419 - INFO - User activity logged: super_admin, Viewed users, , Low Risk
+2025-06-12 22:56:38,328 - ERROR - User activity logged: super_admin, Adding a new System Administrator, 'bytes' object has no attribute 'encode', High Risk

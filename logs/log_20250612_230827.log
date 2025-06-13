@@ -1,0 +1,4 @@
+2025-06-12 23:08:33,686 - INFO - User activity logged: Super Admin, Logged in, , Low Risk
+2025-06-12 23:08:33,693 - INFO - User activity logged: super_admin, Accessed Super Administrator Dashboard, , Low Risk
+2025-06-12 23:08:35,813 - INFO - User activity logged: super_admin, Accessed User Management, , Low Risk
+2025-06-12 23:08:38,157 - ERROR - User activity logged: super_admin, Viewing users, , High Risk

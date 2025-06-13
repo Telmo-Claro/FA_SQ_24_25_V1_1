@@ -11,10 +11,10 @@ class Ui:
 
     def landing(self):
         while True:
-            print("================= URBAN MOBILITY SYSTEM =================")
-            print("===============  Welcome to Urban Mobility! =============")
-            print("1) Login")
-            print("Q) Exit")
+            print("\n=== URBAN MOBILITY SYSTEM ===")
+            print("=== Welcome to Urban Mobility! ===\n")
+            print("1. Login")
+            print("Q. Exit\n")
             choice = input("> ").strip().upper()
             print("")
 
@@ -66,10 +66,10 @@ class Ui:
         try:
             while True:
                 print(f"SUPER ADMINISTRATOR DASHBOARD")
-                print(f"Welcome, {user.firstname} {user.lastname}!")
-                print("1) User Management")
-                print("2) Backup Management")
-                print("3) Data Management")
+                print(f"Welcome, {user.first_name} {user.last_name}!")
+                print("1. User Management")
+                print("2. Backup Management")
+                print("3. Data Management")
                 print("Q) Logout")
                 choice = input("> ").strip().lower()
                 print("")
@@ -100,24 +100,28 @@ class Ui:
                               additional_info="")
         try:
             while True:
-                print("================= USER MANAGEMENT =================")
-                print("================= System Administrator =================")
-                print(f"1) Add new System Administrator")
-                print(f"2) Modify or update System Administrator")
-                print(f"3) Delete System Administrator")
-                print(f"4) Reset System Administrator password (temporary)")
-                print("================= Service Engineer =================")
-                print(f"5) Add new Service Engineer")
-                print(f"6) Modify or update Service Engineer")
-                print(f"7) Delete Service Engineer")
-                print(f"8) Reset Service Engineer password (temporary)")
-                print("================= Other =================")
-                print(f"9) View Users")
-                print(f"Q) Back")
+                print("\n=== USER MANAGEMENT ===")
+                
+                print("\n=== System Administrator ===")
+                print("1. Add new System Administrator")
+                print("2. Modify or update System Administrator")
+                print("3. Delete System Administrator")
+                print("4. Reset System Administrator password (temporary)")
+                
+                print("\n=== Service Engineer ===")
+                print("5. Add new Service Engineer")
+                print("6. Modify or update Service Engineer")
+                print("7. Delete Service Engineer")
+                print("8. Reset Service Engineer password (temporary)")
+                
+                print("\n=== Other ===")
+                print("9. View Users")
+                print("\nQ. Back\n")
                 choice = input("> ").strip().lower()
                 print("")
 
                 if choice == "q":
+                    print("Exiting...")
                     break
                 elif choice == "1":
                     if user.add_new_system_admin(self._db, self._logger):
@@ -126,17 +130,21 @@ class Ui:
                         print("")
                     else:
                         print("Failed to add System Administrator. Please try again.")
+                        input("Press any key to continue...")
                         print("")
                 elif choice == "2":
                     if user.update_system_admin(self._db, self._logger):
                         print("User updated successfully!")
+                        input("Press any key to continue...")
                         print("")
                     else:
                         print("Failed to update user. Please try again.")
+                        input("Press any key to continue...")
                         print("")
                 elif choice == "3":
                     if user.delete_system_admin(self._db, self._logger):
                         print("User deleted successfully!")
+                        input("Press any key to continue...")
                         print("")
                     else:
                         print("Failed to delete user. Please try again.")
@@ -144,47 +152,58 @@ class Ui:
                 elif choice == "4":
                     if user.reset_system_admin_password(self._db, self._logger):
                         print("User updated successfully!")
+                        input("Press any key to continue...")
                         print("")
                     else:
                         print("Failed to update user. Please try again.")
-                        print("")
+                        input("")
                 elif choice == "5":
                     if user.add_new_service_engineer(self._db, self._logger):
                         print("Service Engineer added successfully!")
+                        input("Press any key to continue...")
                         print("")
                     else:
                         print("Failed to add Service Engineer. Please try again.")
+                        input("Press any key to continue...")
                         print("")
                 elif choice == "6":
                     if user.update_service_engineer(self._db, self._logger):
                         print("Service Engineer updated successfully!")
+                        input("Press any key to continue...")
                         print("")
                     else:
                         print("Failed to update Service Engineer. Please try again.")
+                        input("Press any key to continue...")
                         print("")
                 elif choice == "7":
                     if user.delete_service_engineer(self._db, self._logger):
                         print("Service Engineer deleted successfully!")
+                        input("Press any key to continue...")
                         print("")
                     else:
                         print("Failed to delete Service Engineer. Please try again.")
+                        input("Press any key to continue...")
                         print("")
                 elif choice == "8":
                     if user.reset_service_engineer_password(self._db, self._logger):
                         print("Service Engineer password reset successfully!")
+                        input("Press any key to continue...")
                         print("")
                     else:
                         print("Failed to reset Service Engineer password. Please try again.")
+                        input("Press any key to continue...")
                         print("")
                 elif choice == "9":
                     if user.view_users(self._db, self._logger):
                         input("Press Enter to continue...")
                     else:
                         print("Failed to view users. Please try again.")
+                        input("Press any key to continue...")
                         print("")
                 else:
                     print("Invalid option. Please try again.")
-                    input("Press Enter to continue...")
+                    input("Press any key to continue...")
+                    print("")
         except Exception as e:
             self._logger.log_error(user=user,
                                   activity_description="An unexpected error occurred in User Management",
@@ -195,12 +214,12 @@ class Ui:
 
     def backup_management_super_admin(self, user):
         while True:
-            print("================= BACKUP MANAGEMENT =================")
-            print(f"1) Create system backup")
-            print(f"2) Restore system backup")
-            print(f"3) Generate one-use restore code")
-            print(f"4) Revoke one-use restore code")
-            print(f"Q) Back")
+            print("\n=== BACKUP MANAGEMENT ===")
+            print("1. Create system backup")
+            print("2. Restore system backup")
+            print("3. Generate one-use restore code")
+            print("4. Revoke one-use restore code")
+            print("\nQ. Back\n")
             choice = input("> ").strip().lower()
             print("")
 
@@ -235,18 +254,23 @@ class Ui:
                 input("Press Enter to continue...")   
 
     def data_management_super_admin(self, user):
-      while True:
-            print("================= DATA MANAGEMENT =================")
-            print(f"1) Add new scooter")
-            print(f"2) Modify or update scooter")
-            print(f"3) Delete scooter")
-            print(f"4) Search scooter")
-            print(f"5) Add new traveller")
-            print(f"6) Modify or update traveller")
-            print(f"7) Delete traveller")
-            print(f"8) Search traveller")
-            print(f"9) View logs")
-            print(f"Q) Back")
+        while True:
+            print("\n=== DATA MANAGEMENT ===")
+            print("\n=== Scooters ===")
+            print("1. Add new scooter")
+            print("2. Modify or update scooter")
+            print("3. Delete scooter")
+            print("4. Search scooter")
+            
+            print("\n=== Travellers ===")
+            print("5. Add new traveller")
+            print("6. Modify or update traveller")
+            print("7. Delete traveller")
+            print("8. Search traveller")
+            
+            print("\n=== Other ===")
+            print("9. View logs")
+            print("\nQ. Back\n")
             choice = input("> ").strip().lower()
             print("")
 
@@ -309,4 +333,3 @@ class Ui:
             else:
                 print("Invalid option. Please try again.")
                 input("Press Enter to continue...")
-    

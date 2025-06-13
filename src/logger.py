@@ -33,9 +33,6 @@ class Logger():
         username = self.get_username(user)
         date = datetime.now().strftime("%Y-%m-%d")
         time = datetime.now().strftime("%H:%M:%S")
-        username = Helper.symmetric_encrypt(username)
-        activity_description = Helper.symmetric_encrypt(activity_description)
-        additional_info = Helper.symmetric_encrypt(additional_info)
         self.database.add_log(date, time, username, activity_description, additional_info, suspicious_level)
         
     def setup_logging(self): # create a log file with datetime in the filename
@@ -81,7 +78,7 @@ class Logger():
             error_message,
             suspicious_level="High Risk"
         )
-        logging.error(f"User activity logged: {username}, {activity_description}, {additional_info}, High Risk")
+        logging.error(f"User activity logged: {username}, {activity_description}, {error_message}, High Risk")
 
 """
 Log regular activity

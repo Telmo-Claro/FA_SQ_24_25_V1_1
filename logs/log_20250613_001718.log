@@ -1,0 +1,14 @@
+2025-06-13 00:17:29,299 - INFO - User activity logged: Super Admin, Logged in, , Low Risk
+2025-06-13 00:17:29,306 - INFO - User activity logged: super_admin, Accessed Super Administrator Dashboard, , Low Risk
+2025-06-13 00:17:30,565 - INFO - User activity logged: super_admin, Accessed User Management, , Low Risk
+2025-06-13 00:17:31,485 - INFO - User activity logged: super_admin, Viewed users, , Low Risk
+2025-06-13 00:17:45,894 - ERROR - User activity logged: super_admin, Restoring a backup, Traceback (most recent call last):
+  File "c:\Users\Telmo\OneDrive\Documents\GitHub\FA_SQ_24_25_V1_1\src\models.py", line 312, in restore_system_backup
+    zipf.extractall(f"{Path(__file__)}")
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\zipfile.py", line 1701, in extractall
+    self._extract_member(zipinfo, path, pwd)
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\zipfile.py", line 1755, in _extract_member
+    open(targetpath, "wb") as target:
+    ^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'c:\\Users\\Telmo\\OneDrive\\Documents\\GitHub\\FA_SQ_24_25_V1_1\\src\\models.py\\urban_mobility.db'
+, High Risk

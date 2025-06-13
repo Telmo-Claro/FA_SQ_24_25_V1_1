@@ -1,0 +1,5 @@
+2025-06-12 23:47:49,727 - INFO - User activity logged: Super Admin, Logged in, , Low Risk
+2025-06-12 23:47:49,734 - INFO - User activity logged: super_admin, Accessed Super Administrator Dashboard, , Low Risk
+2025-06-12 23:47:50,685 - INFO - User activity logged: super_admin, Accessed User Management, , Low Risk
+2025-06-12 23:47:52,148 - INFO - User activity logged: super_admin, Resetting User Password, , Low Risk
+2025-06-12 23:48:02,994 - INFO - User activity logged: super_admin, Viewed users, , Low Risk

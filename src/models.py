@@ -1,28 +1,16 @@
 from helper import Helper
 from datetime import datetime
+import zipfile
+import os
+from pathlib import Path
 
 class User:
     def __init__(self, first_name, last_name, username, password, role):
-        if role == "Super Administrator":
-            self.username = "super_admin"
-            self.password = "Admin_123?"
-            self.role = "Super Administrator"
-            self.firstname = "Super"
-            self.lastname = "Administrator"
-        else:
-            if Helper.validate_username(username):
-                self.username = username
-            else:
-                raise ValueError(f"Invalid username: {username}. Must be 8-10 characters long, start with a letter or underscore, and contain only letters, numbers, underscores, apostrophes, and periods.")
-            self.username = Helper.symmetric_encrypt(username)
-            if Helper.validate_password(password):
-                hashed_password = Helper.utils_hash(password)
-                self.password = hashed_password
-            else:
-                raise ValueError(f"Invalid password: {password}. Must be 12-30 characters long, contain at least one uppercase letter, one lowercase letter, one digit, and one special character.")
+            self.first_name = first_name
+            self.last_name = last_name
+            self.username = username
+            self.password = password
             self.role = role
-            self.firstname = first_name
-            self.lastname = last_name
 
     "From here on, these methods are specific for user management, like adding, updating and deleting users."
 
@@ -54,21 +42,17 @@ class User:
                 last_name = input("Last Name: ")
                 username = Helper.validate_username(input("Username: "))
                 password = Helper.validate_password(input("Password: "))
+
                 print(f"New System Administrator: {first_name} {last_name}, Username: {username}, Role: {user_role}")
                 confirm = input("Confirm (Y/N): ").strip().upper()
                 if confirm == "Y":
-                    # Add the new user to the database
                     encrypted_username = Helper.symmetric_encrypt(username)
                     hashed_password = Helper.utils_hash(password)
-                    database.add_user(first_name, last_name,
-                     encrypted_username, hashed_password, user_role)
-                    logger.log_info(
-                        user=self,
-                        activity_description="New System Administrator added",
-                        additional_info=f"Username: {encrypted_username}, Role: {user_role}"
-                    )
-                    logger.log_info(self, f"Added {encrypted_username}", "System Administrator")
-                    return True
+                    result = database.add_user(first_name, last_name, encrypted_username, hashed_password, user_role)
+                    if result:
+                        logger.log_info(self, f"Added {encrypted_username}", "System Administrator")
+                        return True
+                    return False
                 elif confirm == "N":
                     print("User creation cancelled.")
                     return False
@@ -82,23 +66,27 @@ class User:
         # ToDo
         try:
             print("Please enter the username of the System Administrator you want to update.")
-            current_username = input("Username: ")
+            current_username = input("Username: ").lower().strip()
             while True:
                 role = "System Administrator"
-                print("Update System Administrator Details")
+                print("All information will be replaced.\nIf you wish to keep old information, please write it again.")
                 first_name = input("First Name: ")
                 last_name = input("Last Name: ")
+
                 username = Helper.validate_username(input("Username: "))
                 password = Helper.validate_password(input("Password: "))
-                print(f"Updated System Administrator: {first_name} {last_name}, Username: {username}, Role: {role}")
+
+                print(f"Updated Information: {first_name} {last_name}, Username: {username}, Role: {role}")
+
                 confirm = input("Confirm (Y/N): ").strip().upper()
                 if confirm == "Y":
-                    # Update the user in the database
                     encrypted_username = Helper.symmetric_encrypt(username)
                     hashed_password = Helper.utils_hash(password)
-                    database.update_user(current_username, first_name, last_name, encrypted_username, hashed_password)
-                    logger.log_info(self, "Updated a system admin", f"User: {username}")
-                    return True
+                    result = database.update_user(current_username, first_name, last_name, encrypted_username, hashed_password)
+                    if result:
+                        logger.log_info(self, "Updated a system admin", f"User: {username}")
+                        return True
+                    return False
                 elif confirm == "N":
                     print("User creation cancelled.")
                     return False
@@ -112,21 +100,16 @@ class User:
         try:
             while True:
                 print("Please insert the username of the user you wish to delete")
-                username = input("Username: ")
+                username = input("Username: ").lower().strip()
                 print(f"Are you sure you want to delete the following user:")
                 print(f"Username: {username}")
                 confirm = input("Confirm (Y/N): ").strip().upper()
                 if confirm == "Y":
-                    # Add the new user to the database
-                    encrypted_username = Helper.symmetric_encrypt(username)
-                    database.delete_user(encrypted_username)
-                    logger.log_info(
-                        user=self,
-                        activity_description="System Administrator deleted",
-                        additional_info=f"Username: {username}"
-                    )
-                    logger.log_info(self, f"Deleted {username}", "System Administrator")
-                    return True
+                    result = database.delete_user(username)
+                    if result:
+                        logger.log_info(self, f"Deleted {username}", "System Administrator")
+                        return True
+                    return False
                 elif confirm == "N":
                     print("User creation cancelled.")
                     return False
@@ -138,16 +121,29 @@ class User:
     
     def reset_system_admin_password(self, database, logger):
         # ToDo
-        # Super Admin can reset System Admin password.
-        # System Admin can't reset System Admin password.
-        # Service Engineer can't reset System Admin password.
-        choice = ""
-        while choice not in ["back"]:
-            print("Please enter the username of the System Adminsitrator you wish to change it's password:")
-            print("Otherwhise, enter 'back' to go back")
-            choice = input("> ").lower().strip()
-
-        return
+        while True:
+            logger.log_info(self, "Resetting User Password")
+            try:
+                print("=== Resetting User Password ===")
+                print("Please insert the System Administrator username you wish to update")
+                username = input("> ")
+                user = database.return_user(Helper.symmetric_encrypt(username))
+                if user is None or user is False:
+                    print("User not found")
+                    input("Press Enter to continue...")
+                    return False
+                while True:
+                    print(f"This username belongs to: {user.first_name} {user.last_name}")
+                    print(f"Do you wish to proceed [Y/N]")
+                    choice = input("> ").upper().strip()
+                    if choice == "N":
+                        return False
+                    new_password = Helper.random_password_generator()
+                    print(f"\nThis message will only be shown once, this is the new password: {new_password}")
+                    return database.update_user(user.username, user.first_name, user.last_name, user.username, Helper.utils_hash(new_password))
+            except Exception as e:
+                logger.log_error(self, f"Resetting a System Admin password", e)
+                return False
     
     def add_new_service_engineer(self, database, logger):
         # ToDo
@@ -159,21 +155,17 @@ class User:
                 last_name = input("Last Name: ")
                 username = Helper.validate_username(input("Username: "))
                 password = Helper.validate_password(input("Password: "))
-                print(f"New Service Engineer: {first_name} {last_name}, \nUsername: {username}, Role: {user_role}")
+
+                print(f"New Service Engineer: {first_name} {last_name}, Username: {username}, Role: {user_role}")
                 confirm = input("Confirm (Y/N): ").strip().upper()
                 if confirm == "Y":
-                    # Add the new user to the database
                     encrypted_username = Helper.symmetric_encrypt(username)
                     hashed_password = Helper.utils_hash(password)
-                    database.add_user(first_name, last_name,
-                     encrypted_username, password, user_role)
-                    logger.log_info(
-                        user=self,
-                        activity_description="New Service Engineer added",
-                        additional_info=f"Username: {username}, Role: {user_role}"
-                    )
-                    logger.log_info(self, f"Added {username}", "Service Engineer")
-                    return True
+                    result = database.add_user(first_name, last_name, encrypted_username, hashed_password, user_role)
+                    if result:
+                        logger.log_info(self, f"Added {encrypted_username}", "Service Engineer")
+                        return True
+                    return False
                 elif confirm == "N":
                     print("User creation cancelled.")
                     return False
@@ -185,56 +177,174 @@ class User:
     
     def update_service_engineer(self, database, logger):
         # ToDo
-        # Super Admin can update Service Engineer.
-        # System Admin can update Service Engineer.
-        # Service Engineer can't update Service Engineer.
-        return
+        try:
+            print("Please enter the username of the Service Engineer you want to update.")
+            current_username = input("Username: ").lower().strip()
+            while True:
+                role = "Service Engineer"
+                print("All information will be replaced.\nIf you wish to keep old information, please write it again.")
+                first_name = input("First Name: ")
+                last_name = input("Last Name: ")
+
+                username = Helper.validate_username(input("Username: "))
+                password = Helper.validate_password(input("Password: "))
+
+                print(f"Updated Information: {first_name} {last_name}, Username: {username}, Role: {role}")
+
+                confirm = input("Confirm (Y/N): ").strip().upper()
+                if confirm == "Y":
+                    encrypted_username = Helper.symmetric_encrypt(username)
+                    hashed_password = Helper.utils_hash(password)
+                    result = database.update_user(current_username, first_name, last_name, encrypted_username, hashed_password)
+                    if result:
+                        logger.log_info(self, "Updated a Service Engineer", f"User: {username}")
+                        return True
+                    return False
+                elif confirm == "N":
+                    print("User creation cancelled.")
+                    return False
+                else:
+                    print("Invalid input. Please enter Y or N.")
+        except Exception as e:
+            logger.log_error(self, "Updating a Service Engineer", e)
     
     def delete_service_engineer(self, database, logger):
         # ToDo
-        # Super Admin can delete Service Engineer.
-        # System Admin can delete Service Engineer.
-        # Service Engineer can't delete Service Engineer.
-        return
+        try:
+            while True:
+                print("Please insert the username of the user you wish to delete")
+                username = input("Username: ").lower().strip()
+                print(f"Are you sure you want to delete the following user:")
+                print(f"Username: {username}")
+                confirm = input("Confirm (Y/N): ").strip().upper()
+                if confirm == "Y":
+                    result = database.delete_user(username)
+                    if result:
+                        logger.log_info(self, f"Deleted {username}", "Service Engineer")
+                        return True
+                    return False
+                elif confirm == "N":
+                    print("User creation cancelled.")
+                    return False
+                else:
+                    print("Invalid input. Please enter Y or N.")
+        except Exception as e:
+            logger.log_error(self, "Deleting a Service Engineer", e)
+            return False
     
     def reset_service_engineer_password(self, database, logger):
         # ToDo
-        # Super Admin can reset Service Engineer password.
-        # System Admin can reset Service Engineer password.
-        # Service Engineer can't reset Service Engineer password.
-        return
+        while True:
+            logger.log_info(self, "Resetting User Password")
+            try:
+                print("=== Resetting User Password ===")
+                print("Please insert the Service Engineer username you wish to update")
+                username = input("> ")
+                user = database.return_user(Helper.symmetric_encrypt(username))
+                if user is None or user is False:
+                    print("User not found")
+                    input("Press Enter to continue...")
+                    return False
+                while True:
+                    print(f"This username belongs to: {user.first_name} {user.last_name}")
+                    print(f"Do you wish to proceed [Y/N]")
+                    choice = input("> ").upper().strip()
+                    if choice == "N":
+                        return False
+                    new_password = Helper.random_password_generator()
+                    print(f"\nThis message will only be shown once, this is the new password: {new_password}")
+                    return database.update_user(user.username, user.first_name, user.last_name, user.username, Helper.utils_hash(new_password))
+            except Exception as e:
+                logger.log_error(self, f"Resetting a Service Engineer password", e)
+                return False
     
     def delete_own_account(self, database, logger):
         # ToDo
         # System Admin can do it
         return
 
-
     "From here on, these methods are used for backup management."
 
     def create_system_backup(self, database, logger):
-        # ToDo
-        # Super Admin can do it.
-        # System Admin can do it.
-        # Service Engineer can't do it.
-        return
+        try:
+            os.makedirs("Backups", exist_ok=True)
+
+            timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M")
+            zip_filename = f"backup_{timestamp}.zip"
+
+            zip_path = os.path.join("Backups", zip_filename)
+
+            with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zipf:
+                zipf.write(database.path, os.path.basename(database.path))
+
+            logger.log_info(self, "Made a backup", f"{zip_filename}")
+            return True
+        except Exception as e:
+            logger.log_error(self, "Making a backup", e)
+            return False
 
     def restore_system_backup(self, database, logger):
-        # ToDo
-        # Super Admin can do it. (any)
-        # System Admin can do it (only with code).
-        # Service Engineer can't do it.
-        return
+        try:
+            backup_folder = "Backups"
 
-    def generate_one_use_restore_code(self, database, logger):
+            if not os.path.exists(backup_folder):
+                print("No backups found! Folder is empty or missing.")
+                return False
+
+            backups = [f for f in os.listdir(backup_folder) if f.endswith('.zip')]
+            if not backups:
+                print("No ZIP backups found in the folder.")
+                return False
+
+            print("\nAvailable Backups:")
+            for i, backup in enumerate(backups, 1):
+                print(f"{i}. {backup}")
+
+            try:
+                choice = int(input("\nEnter the number of the backup to restore: ")) - 1
+                selected_backup = backups[choice]
+            except Exception as e:
+                print("Invalid choice!")
+                return False
+            
+            zip_path = os.path.join(backup_folder, selected_backup)
+            with zipfile.ZipFile(zip_path, "r") as zipf:
+                zipf.extractall(f"./src")
+                logger.log_info(self, "Restored a backup", f"{selected_backup}")
+                return True
+            
+            return False
+        except Exception as e:
+            logger.log_error(self, "Restoring a backup", e)
+            return False
+
+    def generate_one_use_restore_code(self, database, logger, filename="one_time_code.txt"):
         # ToDo
         # Super Admin can do it. (only)
-        return
+        try:
+            code = Helper.random_password_generator()
+            code = Helper.utils_hash(code)
+            result = database.add_one_time_use_code(code)
+            if result:
+                return True
+            return False
+        except Exception as e:
+            logger.log_error(self, "Making a one use restore code", e)
+            return False
+        return False
     
-    def revoke_one_use_restore_code(self, database, logger):
+    def revoke_one_use_restore_code(self, database, logger, filename="one_time_code.txt"):
         # ToDo
         # Super Admin can do it. (only)
-        return
+        try:
+            code = database.return_one_time_use_code()
+            if code is None or code is False:
+                return False
+            return code
+        except Exception as e:
+            logger.log_error(self, "Revoking a one use restore code", e)
+            return False
+        return False
 
     "From here on, these methods are used for data management."
 
@@ -273,6 +383,3 @@ class User:
     def view_logs(self, database, logger):
         # ToDo
         return
-
-
-

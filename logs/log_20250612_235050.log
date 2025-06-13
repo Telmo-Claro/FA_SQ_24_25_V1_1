@@ -1,0 +1,11 @@
+2025-06-12 23:50:55,707 - INFO - User activity logged: Super Admin, Logged in, , Low Risk
+2025-06-12 23:50:55,714 - INFO - User activity logged: super_admin, Accessed Super Administrator Dashboard, , Low Risk
+2025-06-12 23:50:56,575 - INFO - User activity logged: super_admin, Accessed User Management, , Low Risk
+2025-06-12 23:51:10,802 - INFO - User activity logged: super_admin, Added b'gAAAAABoS0vOaWqHqBdG4uOQDQI31R3a9Uxsjpa1Kyom_25-UiPR0qTnKhx1_5CWaFe_I9DmgvRr3w3qPlShfrXGoHBCSsDGKw==', Service Engineer, Low Risk
+2025-06-12 23:51:13,197 - INFO - User activity logged: super_admin, Viewed users, , Low Risk
+2025-06-12 23:51:30,133 - INFO - User activity logged: super_admin, Updated a system admin, User: kacpersiu, Low Risk
+2025-06-12 23:51:32,069 - INFO - User activity logged: super_admin, Viewed users, , Low Risk
+2025-06-12 23:51:37,524 - INFO - User activity logged: super_admin, Resetting User Password, , Low Risk
+2025-06-12 23:51:45,721 - INFO - User activity logged: super_admin, Viewed users, , Low Risk
+2025-06-12 23:51:52,343 - INFO - User activity logged: super_admin, Deleted kacpersiu, Service Engineer, Low Risk
+2025-06-12 23:51:54,444 - INFO - User activity logged: super_admin, Viewed users, , Low Risk

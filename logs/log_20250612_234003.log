@@ -1,0 +1,5 @@
+2025-06-12 23:40:09,706 - INFO - User activity logged: Super Admin, Logged in, , Low Risk
+2025-06-12 23:40:09,714 - INFO - User activity logged: super_admin, Accessed Super Administrator Dashboard, , Low Risk
+2025-06-12 23:40:11,414 - INFO - User activity logged: super_admin, Accessed User Management, , Low Risk
+2025-06-12 23:40:24,173 - INFO - User activity logged: super_admin, Updated a system admin, User: elisedang, Low Risk
+2025-06-12 23:40:26,457 - INFO - User activity logged: super_admin, Viewed users, , Low Risk

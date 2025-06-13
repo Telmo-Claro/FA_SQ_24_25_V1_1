@@ -1,7 +1,0 @@
-2025-06-12 13:55:34,960 - INFO - User activity logged: Super Admin, Logged in, , Low Risk
-2025-06-12 13:55:34,965 - INFO - User activity logged: super_admin, Accessed Super Administrator Dashboard, , Low Risk
-2025-06-12 13:55:36,731 - INFO - User activity logged: super_admin, Accessed User Management, , Low Risk
-2025-06-12 13:55:43,968 - INFO - User activity logged: super_admin, Viewed users, , Low Risk
-2025-06-12 13:55:57,909 - INFO - User activity logged: super_admin, New System Administrator added, Username: b'gAAAAABoSsBNjYFhwFFvPLY8dfT_kkZBMC0PpJXailLjwH2xWb1WdHNPJ03z84N3wpWiBYcP55RXAo9KEsxjXU5AwNy6XmcXAA==', Role: System Administrator, Low Risk
-2025-06-12 13:55:57,915 - INFO - User activity logged: super_admin, Added b'gAAAAABoSsBNjYFhwFFvPLY8dfT_kkZBMC0PpJXailLjwH2xWb1WdHNPJ03z84N3wpWiBYcP55RXAo9KEsxjXU5AwNy6XmcXAA==', System Administrator, Low Risk
-2025-06-12 13:56:01,415 - INFO - User activity logged: super_admin, Viewed users, , Low Risk
