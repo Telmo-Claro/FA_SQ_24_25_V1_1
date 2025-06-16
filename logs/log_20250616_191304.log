@@ -1,0 +1,32 @@
+2025-06-16 19:13:12,242 - INFO - User activity logged: telmoclaro, Logged in, , Low Risk
+2025-06-16 19:13:12,253 - ERROR - User activity logged: None, Authenticating User, Traceback (most recent call last):
+  File "C:\Users\Telmo\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\cryptography\fernet.py", line 114, in _get_unverified_token_data
+    data = base64.urlsafe_b64decode(token)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\base64.py", line 134, in urlsafe_b64decode
+    return b64decode(s)
+           ^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\base64.py", line 88, in b64decode
+    return binascii.a2b_base64(s, strict_mode=validate)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+binascii.Error: Invalid base64-encoded string: number of data characters (5) cannot be 1 more than a multiple of 4
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Telmo\OneDrive\Documents\GitHub\FA_SQ_24_25_V1_1\src\authenticator.py", line 20, in auth_user
+    return models.User(user[1], user[2], user[3], user[4], user[5], user[6])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Telmo\OneDrive\Documents\GitHub\FA_SQ_24_25_V1_1\src\models.py", line 9, in __init__
+    self.first_name = Helper.symmetric_decrypt(first_name)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Telmo\OneDrive\Documents\GitHub\FA_SQ_24_25_V1_1\src\helper.py", line 88, in symmetric_decrypt
+    return engine.decrypt(encrypted).decode()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Telmo\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\cryptography\fernet.py", line 85, in decrypt
+    timestamp, data = Fernet._get_unverified_token_data(token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Telmo\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\cryptography\fernet.py", line 116, in _get_unverified_token_data
+    raise InvalidToken
+cryptography.fernet.InvalidToken
+, High Risk

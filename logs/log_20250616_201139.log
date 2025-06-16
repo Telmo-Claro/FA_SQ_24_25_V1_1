@@ -1,0 +1,60 @@
+2025-06-16 20:11:45,958 - INFO - User activity logged: telmoclaro, Logged in, , Low Risk
+2025-06-16 20:11:45,965 - INFO - User activity logged: telmoclaro, Accessed System Administrator Dashboard, , Low Risk
+2025-06-16 20:11:48,409 - ERROR - User activity logged: telmoclaro, An unexpected error occurred in the System Administrator Dashboard, Traceback (most recent call last):
+  File "C:\Users\Telmo\OneDrive\Documents\GitHub\FA_SQ_24_25_V1_1\src\user_interface.py", line 356, in landing_system_admin
+    self.user_management_system_admin()
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Ui' object has no attribute 'user_management_system_admin'
+, High Risk
+2025-06-16 20:11:59,024 - INFO - User activity logged: telmoclaro, Logged in, , Low Risk
+2025-06-16 20:11:59,030 - INFO - User activity logged: telmoclaro, Accessed System Administrator Dashboard, , Low Risk
+2025-06-16 20:12:00,193 - INFO - User activity logged: telmoclaro, Accessed Account Features, , Low Risk
+2025-06-16 20:12:01,497 - INFO - User activity logged: telmoclaro, Updating own profile, , Low Risk
+2025-06-16 20:12:12,980 - INFO - User activity logged: Supe r Admin, Logged in, , Low Risk
+2025-06-16 20:12:12,988 - ERROR - User activity logged: telmoclaro, An unexpected error occurred in the System Administrator Dashboard, Traceback (most recent call last):
+  File "C:\Users\Telmo\OneDrive\Documents\GitHub\FA_SQ_24_25_V1_1\src\user_interface.py", line 356, in landing_system_admin
+    self.user_management_system_admin()
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Ui' object has no attribute 'user_management_system_admin'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Telmo\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\cryptography\fernet.py", line 114, in _get_unverified_token_data
+    data = base64.urlsafe_b64decode(token)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\base64.py", line 134, in urlsafe_b64decode
+    return b64decode(s)
+           ^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\base64.py", line 88, in b64decode
+    return binascii.a2b_base64(s, strict_mode=validate)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+binascii.Error: Incorrect padding
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Telmo\OneDrive\Documents\GitHub\FA_SQ_24_25_V1_1\src\user_interface.py", line 352, in landing_system_admin
+    self.landing()
+  File "C:\Users\Telmo\OneDrive\Documents\GitHub\FA_SQ_24_25_V1_1\src\user_interface.py", line 24, in landing
+    self.login()
+  File "C:\Users\Telmo\OneDrive\Documents\GitHub\FA_SQ_24_25_V1_1\src\user_interface.py", line 42, in login
+    user = auth.auth_user(encrypted_username, hashed_password)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Telmo\OneDrive\Documents\GitHub\FA_SQ_24_25_V1_1\src\authenticator.py", line 14, in auth_user
+    return models.User("Super", "Administrator", "super_admin", "Admin_123?", "Super Administrator", 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Telmo\OneDrive\Documents\GitHub\FA_SQ_24_25_V1_1\src\models.py", line 13, in __init__
+    self.username = Helper.symmetric_decrypt(username)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Telmo\OneDrive\Documents\GitHub\FA_SQ_24_25_V1_1\src\helper.py", line 88, in symmetric_decrypt
+    return engine.decrypt(encrypted).decode()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Telmo\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\cryptography\fernet.py", line 85, in decrypt
+    timestamp, data = Fernet._get_unverified_token_data(token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Telmo\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\cryptography\fernet.py", line 116, in _get_unverified_token_data
+    raise InvalidToken
+cryptography.fernet.InvalidToken
+, High Risk
+2025-06-16 20:12:21,173 - INFO - User activity logged: Supe r Admin, Logged in, , Low Risk

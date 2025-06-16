@@ -6,6 +6,7 @@ import platform
 import hashlib
 import string
 import random
+from datetime import datetime
 
 class Helper:
 
@@ -16,6 +17,18 @@ class Helper:
         print("\n" + "=" * width)
         print(f"{title.center(width)}")
         print("=" * width + "\n")
+
+    @staticmethod
+    def get_input(prompt, allow_empty=False):
+        """Gets user input with a quit option"""
+        while True:
+            value = input(prompt).strip()
+            if value.lower().strip() == 'q':
+                print("\nExiting to main menu...")
+                return False
+            if value or allow_empty:
+                return value
+            print("Input cannot be empty. Please try again or 'q' to quit.")
 
     @staticmethod
     def utils_hash(value):
@@ -81,3 +94,78 @@ class Helper:
             os.system('cls')
         else:
             os.system('clear')  # For Linux and macOS
+
+    "Scooter Related Helpers"
+    @staticmethod
+    def validate_serial_number(serial_number):
+        pattern = re.compile(r'^[a-zA-Z0-9]{10,17}$')
+        return bool(pattern.match(serial_number))
+
+    @staticmethod
+    def validate_location(location):
+        # Rotterdam boundaries
+        rotterdam_north = 51.96
+        rotterdam_south = 51.89
+        rotterdam_west = 4.35
+        rotterdam_east = 4.55
+
+        try:
+            # Split and clean the input
+            parts = location.strip().split(',')
+            if len(parts) != 2:
+                return False
+
+            lat = parts[0].strip()
+            lon = parts[1].strip()
+
+            # Validate format: check if they are numbers and have exactly 5 decimal places
+            lat_parts = lat.split('.')
+            lon_parts = lon.split('.')
+
+            # Check if each coordinate has exactly one decimal point and a valid decimal part
+            if (len(lat_parts) != 2 or len(lon_parts) != 2 or
+                    not lat_parts[0].replace('-', '').isdigit() or
+                    not lon_parts[0].replace('-', '').isdigit() or
+                    not lat_parts[1].isdigit() or
+                    not lon_parts[1].isdigit() or
+                    len(lat_parts[1]) != 5 or
+                    len(lon_parts[1]) != 5):
+                return False
+
+            # Convert to float for boundary comparison
+            lat_float = float(lat)
+            lon_float = float(lon)
+
+            # Check if within Rotterdam boundaries
+            if (rotterdam_south <= lat_float <= rotterdam_north and
+                    rotterdam_west <= lon_float <= rotterdam_east):
+                return True
+
+            return False
+
+        except:
+            return False
+
+    @staticmethod
+    def validate_last_maintenance_date(last_maintenance_date):
+        pattern = re.compile(r'^(?P<year>2[0-9]{3})-(?P<month>0[1-9]|1[0-2])-(?P<day>0[1-9]|[12][0-9]|3[01])$')
+        match = pattern.match(last_maintenance_date)
+
+        if not match:
+            return False
+
+        try:
+            datetime.strptime(last_maintenance_date, '%Y-%m-%d')
+            return True
+        except ValueError:
+            return False
+
+    @staticmethod
+    def validate_zip_code(zip_code):
+        pattern = re.compile(r'^[1-9][0-9]{3}[A-Z]{2}$')
+        return bool(pattern.match(zip_code))
+
+    @staticmethod
+    def validate_driving_license(license_number):
+        pattern = re.compile(r'^[A-Z]{1,2}\d{7}$')
+        return bool(re.match(pattern, license_number))

@@ -1,0 +1,10 @@
+2025-06-16 19:59:05,576 - INFO - User activity logged: telmoclaro, Logged in, , Low Risk
+2025-06-16 19:59:05,583 - INFO - User activity logged: telmoclaro, Accessed System Administrator Dashboard, , Low Risk
+2025-06-16 19:59:08,618 - INFO - User activity logged: telmoclaro, Accessed Account Features, , Low Risk
+2025-06-16 19:59:10,947 - INFO - User activity logged: telmoclaro, Changing own password, , Low Risk
+2025-06-16 19:59:28,113 - ERROR - User activity logged: telmoclaro, An unexpected error occurred in Account Features, Traceback (most recent call last):
+  File "C:\Users\Telmo\OneDrive\Documents\GitHub\FA_SQ_24_25_V1_1\src\user_interface.py", line 394, in account_features_system_admin
+    if user.update_own_profile(self._db, self._logger):
+       ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'User' object has no attribute 'update_own_profile'
+, High Risk

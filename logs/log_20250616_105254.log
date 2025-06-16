@@ -1,0 +1,17 @@
+2025-06-16 10:53:00,588 - INFO - User activity logged: Super Admin, Logged in, , Low Risk
+2025-06-16 10:53:00,594 - INFO - User activity logged: super_admin, Accessed Super Administrator Dashboard, , Low Risk
+2025-06-16 10:53:06,446 - INFO - User activity logged: super_admin, Updating traveler, , Low Risk
+2025-06-16 10:53:06,456 - ERROR - User activity logged: super_admin, Updating traveler, Traceback (most recent call last):
+  File "C:\Users\Telmo\OneDrive\Documents\GitHub\FA_SQ_24_25_V1_1\src\models.py", line 690, in update_traveller
+    f"First Name: {Helper.symmetric_decrypt(traveller[2])}, "
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Telmo\OneDrive\Documents\GitHub\FA_SQ_24_25_V1_1\src\helper.py", line 88, in symmetric_decrypt
+    return engine.decrypt(encrypted).decode()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Telmo\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\cryptography\fernet.py", line 85, in decrypt
+    timestamp, data = Fernet._get_unverified_token_data(token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Telmo\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\cryptography\fernet.py", line 119, in _get_unverified_token_data
+    raise InvalidToken
+cryptography.fernet.InvalidToken
+, High Risk

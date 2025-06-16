@@ -1,0 +1,17 @@
+2025-06-16 18:18:46,075 - INFO - User activity logged: Super Admin, Logged in, , Low Risk
+2025-06-16 18:18:46,082 - INFO - User activity logged: super_admin, Accessed Super Administrator Dashboard, , Low Risk
+2025-06-16 18:18:48,568 - INFO - User activity logged: super_admin, Viewing logs, , Low Risk
+2025-06-16 18:18:48,578 - ERROR - User activity logged: super_admin, Viewing logs, Traceback (most recent call last):
+  File "C:\Users\Telmo\OneDrive\Documents\GitHub\FA_SQ_24_25_V1_1\src\models.py", line 1010, in view_logs
+    print(f"ID: {Helper.symmetric_decrypt(log[0])}, "
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Telmo\OneDrive\Documents\GitHub\FA_SQ_24_25_V1_1\src\helper.py", line 88, in symmetric_decrypt
+    return engine.decrypt(encrypted).decode()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Telmo\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\cryptography\fernet.py", line 85, in decrypt
+    timestamp, data = Fernet._get_unverified_token_data(token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Telmo\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\cryptography\fernet.py", line 111, in _get_unverified_token_data
+    raise TypeError("token must be bytes or str")
+TypeError: token must be bytes or str
+, High Risk

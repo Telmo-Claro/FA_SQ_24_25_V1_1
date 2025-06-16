@@ -33,7 +33,11 @@ class Logger():
         username = self.get_username(user)
         date = datetime.now().strftime("%Y-%m-%d")
         time = datetime.now().strftime("%H:%M:%S")
-        self.database.add_log(date, time, username, activity_description, additional_info, suspicious_level)
+        self.database.add_log(Helper.symmetric_encrypt(date), Helper.symmetric_encrypt(time),
+                              Helper.symmetric_encrypt(username),
+                              Helper.symmetric_encrypt(activity_description),
+                              Helper.symmetric_encrypt(additional_info),
+                              Helper.symmetric_encrypt(suspicious_level))
         
     def setup_logging(self): # create a log file with datetime in the filename
         logs_dir = Path(__file__).parent.parent / "logs"

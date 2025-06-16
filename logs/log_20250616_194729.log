@@ -1,0 +1,10 @@
+2025-06-16 19:47:33,706 - INFO - User activity logged: telmoclaro, Logged in, , Low Risk
+2025-06-16 19:47:33,714 - INFO - User activity logged: telmoclaro, Accessed System Administrator Dashboard, , Low Risk
+2025-06-16 19:47:34,844 - INFO - User activity logged: telmoclaro, Accessed Account Features, , Low Risk
+2025-06-16 19:47:35,754 - INFO - User activity logged: telmoclaro, Changing own password, , Low Risk
+2025-06-16 19:47:46,033 - ERROR - User activity logged: telmoclaro, Changing own password, Traceback (most recent call last):
+  File "C:\Users\Telmo\OneDrive\Documents\GitHub\FA_SQ_24_25_V1_1\src\models.py", line 1036, in change_own_password
+    if database.change_own_password(Helper.utils_hash(new_password)):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: Database.change_own_password() missing 1 required positional argument: 'new_password'
+, High Risk

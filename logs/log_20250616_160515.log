@@ -1,0 +1,12 @@
+2025-06-16 16:05:20,332 - INFO - User activity logged: Super Admin, Logged in, , Low Risk
+2025-06-16 16:05:20,338 - INFO - User activity logged: super_admin, Accessed Super Administrator Dashboard, , Low Risk
+2025-06-16 16:05:25,610 - INFO - User activity logged: super_admin, Restored a backup, backup_2025-06-16_15-50.zip, Low Risk
+2025-06-16 16:05:29,709 - INFO - User activity logged: super_admin, Accessed User Management, , Low Risk
+2025-06-16 16:05:30,713 - INFO - User activity logged: super_admin, Viewed users, , Low Risk
+2025-06-16 16:05:35,454 - INFO - User activity logged: super_admin, Adding traveler, , Low Risk
+2025-06-16 16:08:05,545 - ERROR - User activity logged: super_admin, Error adding traveler, Traceback (most recent call last):
+  File "C:\Users\Telmo\OneDrive\Documents\GitHub\FA_SQ_24_25_V1_1\src\models.py", line 760, in add_traveler
+    result = database.add_traveler(
+             ^^^^^^^^^^^^^^^^^^^^^^
+TypeError: Database.add_traveler() got an unexpected keyword argument 'driving_license'
+, High Risk

@@ -48,8 +48,7 @@ class Ui:
             elif user.role == "Super Administrator":
                 self.landing_super_admin(user)
             elif user.role == "System Administrator":
-                print("You don't exist... yet")
-                input("Press Enter to continue...")
+                self.landing_system_admin(user)
                 break
             elif user.role == "Service Engineer":
                 print("You don't exist... yet")
@@ -235,22 +234,22 @@ class Ui:
                 if user.restore_system_backup(self._db, self._logger):
                     print("System backup restored successfully!")
                 else:
-                    print("Feature not yet implemented")
+                    print("An error occurred. Please try again.")
                 input("Press Enter to continue...")
             elif choice == "3":
                 if user.generate_one_use_restore_code(self._db, self._logger):
                     print("One-use restore code generated successfully!")
                 else:
-                    print("Feature not yet implemented")
+                    print("An error occurred. Please try again.")
                 input("Press Enter to continue...")
             elif choice == "4":
                 if user.revoke_one_use_restore_code(self._db, self._logger):
                     print("One-use restore code revoked successfully!")
                 else:
-                    print("Feature not yet implemented")
+                    print("An error occurred. Please try again.")
                 input("Press Enter to continue...")
             else:
-                print("Invalid option. Please try again.")
+                print("An error occurred. Please try again.")
                 input("Press Enter to continue...")   
 
     def data_management_super_admin(self, user):
@@ -279,48 +278,49 @@ class Ui:
             elif choice == "1":
                 if user.add_scooter(self._db, self._logger):
                     print("Scooter added successfully!")
+                    input("Press enter to continue...")
                 else:
                     print("Feature not yet implemented")
                 input("Press Enter to continue...")
             elif choice == "2":
-                if user.update_scooter(self._db, self._logger):
+                if user.admin_update_scooter(self._db, self._logger):
                     print("Scooter updated successfully!")
                 else:
                     print("Feature not yet implemented")
                 input("Press Enter to continue...")
             elif choice == "3":
-                if user.delete_scooter(self._db, self._logger):
+                if user.admin_delete_scooter(self._db, self._logger):
                     print("Scooter deleted successfully!")
                 else:
                     print("Feature not yet implemented")
                 input("Press Enter to continue...")
             elif choice == "4":
                 if user.search_scooter(self._db, self._logger):
-                    print("Scooter found!")
+                    print("")
                 else:
                     print("Feature not yet implemented")
                 input("Press Enter to continue...")
             elif choice == "5":
-                if user.add_traveller(self._db, self._logger):
+                if user.add_traveler(self._db, self._logger):
                     print("Traveller added successfully!")
                 else:
                     print("Feature not yet implemented")
                 input("Press Enter to continue...")
             elif choice == "6":
-                if user.update_traveller(self._db, self._logger):
+                if user.update_traveler(self._db, self._logger):
                     print("Traveller updated successfully!")
                 else:
                     print("Feature not yet implemented")
                 input("Press Enter to continue...")
             elif choice == "7":
-                if user.delete_traveller(self._db, self._logger):
+                if user.delete_traveler(self._db, self._logger):
                     print("Traveller deleted successfully!")
                 else:
                     print("Feature not yet implemented")
                 input("Press Enter to continue...")
             elif choice == "8":
                 if user.search_traveller(self._db, self._logger):
-                    print("Traveller found!")
+                    print("")
                 else:
                     print("Feature not yet implemented")
                 input("Press Enter to continue...")
@@ -333,3 +333,88 @@ class Ui:
             else:
                 print("Invalid option. Please try again.")
                 input("Press Enter to continue...")
+
+    def landing_system_admin(self, user):
+        self._logger.log_info(user=user,
+                              activity_description="Accessed System Administrator Dashboard")
+        try:
+            while True:
+
+                print(f"=== SYSTEM ADMINISTRATOR DASHBOARD ===")
+                print(f"Welcome, {user.first_name} {user.last_name}!")
+                print("1. Account Features")
+                print("2. User Management")
+                print("3. Backup Management")
+                print("4. Data Management")
+                print("Q) Logout")
+                choice = input("> ").strip().lower()
+                print("")
+
+                if choice == "q":
+                    self.landing()
+                elif choice == "1":
+                    self.account_features_system_admin(user)
+                elif choice == "2":
+                    # self.user_management_system_admin()
+                    return
+                elif choice == "3":
+                    # self.backup_management_system_admin()
+                    return
+                elif choice == "4":
+                    # self.data_management_system_admin()
+                    return
+                else:
+                    print("Invalid option. Please try again.")
+
+        except Exception as e:
+            self._logger.log_error(user=user,
+                                  activity_description="An unexpected error occurred in the System Administrator Dashboard",
+                                  additional_info=e)
+            print("An unexpected error occurred. Please try again later.")
+            input("Press Enter to continue...")
+            self.landing()
+
+    def account_features_system_admin(self, user):
+        self._logger.log_info(user=user,
+                              activity_description="Accessed Account Features",
+                              additional_info="")
+        try:
+            while True:
+                print("\n=== ACCOUNT FEATURES ===")
+                print("1. Change password")
+                print("2. Update own profile")
+                print("3. Delete own account")
+                print("\nQ. Back\n")
+                choice = input("> ").strip().lower()
+                print("")
+                if choice == "q":
+                    break
+                elif choice == "1":
+                    if user.change_own_password(self._db, self._logger):
+                        print("Password changed successfully!")
+                        input("Press Enter to continue...")
+                    else:
+                        print("Failed to change password. Please try again.")
+                        input("Press Enter to continue...")
+                elif choice == "2":
+                    if user.update_own_profile(self._db, self._logger):
+                        print("Profile updated successfully!")
+                        input("Press Enter to continue...")
+                    else:
+                        print("Failed to update profile. Please try again.")
+                        input("Press Enter to continue...")
+                elif choice == "3":
+                    if user.delete_own_account(self._db, self._logger):
+                        print("Account deleted successfully!")
+                        input("Press Enter to continue...")
+                    else:
+                        print("Failed to delete account. Please try again.")
+                        input("Press Enter to continue...")
+                else:
+                    print("Invalid option. Please try again.")
+                    input("Press Enter to continue...")
+        except Exception as e:
+            self._logger.log_error(user=user,
+                                  activity_description="An unexpected error occurred in Account Features",
+                                  additional_info=e)
+            print("An unexpected error occurred. Please try again later.")

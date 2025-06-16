@@ -1,0 +1,9 @@
+2025-06-16 10:36:07,089 - INFO - User activity logged: Super Admin, Logged in, , Low Risk
+2025-06-16 10:36:07,095 - INFO - User activity logged: super_admin, Accessed Super Administrator Dashboard, , Low Risk
+2025-06-16 10:36:14,555 - INFO - User activity logged: super_admin, Updating traveler, , Low Risk
+2025-06-16 10:36:14,563 - ERROR - User activity logged: super_admin, Updating traveler, Traceback (most recent call last):
+  File "C:\Users\Telmo\OneDrive\Documents\GitHub\FA_SQ_24_25_V1_1\src\models.py", line 686, in update_traveller
+    travellers = database.return_all_travellers()
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Database' object has no attribute 'return_all_travellers'
+, High Risk

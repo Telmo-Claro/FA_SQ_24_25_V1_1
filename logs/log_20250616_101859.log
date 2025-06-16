@@ -1,0 +1,9 @@
+2025-06-16 10:19:09,079 - INFO - User activity logged: Super Admin, Logged in, , Low Risk
+2025-06-16 10:19:09,084 - INFO - User activity logged: super_admin, Accessed Super Administrator Dashboard, , Low Risk
+2025-06-16 10:19:12,188 - INFO - User activity logged: super_admin, Adding traveler, , Low Risk
+2025-06-16 10:20:18,235 - ERROR - User activity logged: super_admin, Adding traveler, Traceback (most recent call last):
+  File "C:\Users\Telmo\OneDrive\Documents\GitHub\FA_SQ_24_25_V1_1\src\models.py", line 677, in add_traveller
+    driving_license=encrypted_driving_license)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'encrypted_driving_license' where it is not associated with a value
+, High Risk

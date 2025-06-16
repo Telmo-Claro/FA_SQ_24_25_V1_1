@@ -1,0 +1,8 @@
+2025-06-16 15:50:07,138 - INFO - User activity logged: Super Admin, Logged in, , Low Risk
+2025-06-16 15:50:07,143 - INFO - User activity logged: super_admin, Accessed Super Administrator Dashboard, , Low Risk
+2025-06-16 15:50:08,476 - INFO - User activity logged: super_admin, Accessed User Management, , Low Risk
+2025-06-16 15:50:34,998 - INFO - User activity logged: super_admin, Added b'gAAAAABoUCEq0x99Pt7sZhl06DrdzclRrNP_M_1cN4gNxniZxydpandeVyvRjA96PjPlroEdxm5J8hSvVAZsagREXBDuOBC3xg==', System Administrator, Low Risk
+2025-06-16 15:50:48,259 - INFO - User activity logged: super_admin, Added b'gAAAAABoUCE4xib6ATnRpKMjH-2HMxi1D7G550o3EoIy3YqXivUbxerp1ayb4D0WiUdEztIJ6PI1za1luwOA-IsdDOzQo-rswg==', Service Engineer, Low Risk
+2025-06-16 15:50:51,309 - INFO - User activity logged: super_admin, Viewed users, , Low Risk
+2025-06-16 15:50:56,864 - INFO - User activity logged: super_admin, Made a backup, backup_2025-06-16_15-50.zip, Low Risk
+2025-06-16 15:51:02,115 - INFO - User activity logged: super_admin, Adding scooter, , Low Risk

@@ -1,0 +1,4 @@
+2025-06-14 22:59:49,946 - INFO - User activity logged: Super Admin, Logged in, , Low Risk
+2025-06-14 22:59:49,952 - INFO - User activity logged: super_admin, Accessed Super Administrator Dashboard, , Low Risk
+2025-06-14 22:59:53,446 - INFO - User activity logged: super_admin, Deleting traveler, , Low Risk
+2025-06-14 23:00:18,431 - INFO - User activity logged: super_admin, Restored a backup, backup_2025-06-14_22-57.zip, Low Risk

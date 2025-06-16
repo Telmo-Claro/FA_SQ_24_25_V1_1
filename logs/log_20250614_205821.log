@@ -1,0 +1,11 @@
+2025-06-14 20:58:29,079 - INFO - User activity logged: Super Admin, Logged in, , Low Risk
+2025-06-14 20:58:29,084 - INFO - User activity logged: super_admin, Accessed Super Administrator Dashboard, , Low Risk
+2025-06-14 20:58:33,329 - INFO - User activity logged: super_admin, Made a backup, backup_2025-06-14_20-58.zip, Low Risk
+2025-06-14 20:58:41,462 - ERROR - User activity logged: super_admin, An unexpected error occurred in the Super Administrator Dashboard, Traceback (most recent call last):
+  File "C:\Users\Telmo\OneDrive\Documents\GitHub\FA_SQ_24_25_V1_1\src\user_interface.py", line 84, in landing_super_admin
+    self.data_management_super_admin(user)
+  File "C:\Users\Telmo\OneDrive\Documents\GitHub\FA_SQ_24_25_V1_1\src\user_interface.py", line 292, in data_management_super_admin
+    if user.delete_scooter(self._db, self._logger):
+       ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'User' object has no attribute 'delete_scooter'
+, High Risk
