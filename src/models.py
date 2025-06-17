@@ -261,11 +261,6 @@ class User:
                 logger.log_error(self, f"Resetting a Service Engineer password", e)
                 return False
 
-    def delete_own_account(self, database, logger):
-        # ToDo
-        # System Admin can do it
-        return
-
     "From here on, these methods are used for backup management."
 
     def create_system_backup(self, database, logger):
@@ -281,14 +276,93 @@ class User:
                 zipf.write(database.path, os.path.basename(database.path))
 
             logger.log_info(self, "Made a backup", f"{zip_filename}")
+
+            print(f"Backup created successfully: {zip_filename}")
+            
             return True
         except Exception as e:
             logger.log_error(self, "Making a backup", e)
             return False
 
-    def restore_system_backup(self, database, logger):
+    def restore_any_system_backup(self, database, logger):
         try:
+            backups_database = database.return_all("codes")
+            for backup in backups_database:
+                print(f"Backup ID: {backup[0]}, Backup Name: {Helper.symmetric_decrypt(backup[1])}")
+            while True:
+                try:
+                    choice = input("Enter the ID of the backup you want to restore: ")
+                    choice = int(choice)
+                    if choice < 1 or choice > len(backups_database):
+                        print("Invalid choice!")
+                        return False
+                    break
+                except Exception as e:
+                    print("Invalid choice!")
+
+            selected_backup = Helper.symmetric_decrypt(backups_database[choice - 1][1]) # chooses the name zip_name of the backup file
             backup_folder = "Backups"
+
+            if not os.path.exists(backup_folder):
+                print("No backups found! Folder is empty or missing.")
+                return False
+
+
+            zip_path = os.path.join(backup_folder, selected_backup)
+            with zipfile.ZipFile(zip_path, "r") as zipf:
+                zipf.extractall(f"./src")
+                logger.log_info(self, "Restored a backup", f"{selected_backup}")
+                return True
+
+        except Exception as e:
+            logger.log_error(self, "Restoring a backup", e)
+            return False
+
+    def restore_one_system_backup(self, database, logger, code):
+        try:
+            backups_database = database.return_all("codes")
+            for backup in backups_database:
+                print(f"Backup ID: {backup[0]}, Backup Name: {Helper.symmetric_decrypt(backup[1])}")
+            while True:
+                try:
+                    choice = input("Enter the ID of the backup you want to restore: ")
+                    choice = int(choice)
+                    if choice < 1 or choice > len(backups_database):
+                        print("Invalid choice!")
+                        return False
+                    if backups_database[choice - 1][2] != code:
+                        print("This code does not match the backup you selected!")
+                        return False
+                    break
+                except Exception as e:
+                    print("Invalid choice!")
+
+            selected_backup = Helper.symmetric_decrypt(backups_database[choice - 1][1]) # chooses the name zip_name of the backup file
+            backup_folder = "Backups"
+
+            if not os.path.exists(backup_folder):
+                print("No backups found! Folder is empty or missing.")
+                return False
+
+
+            zip_path = os.path.join(backup_folder, selected_backup)
+            with zipfile.ZipFile(zip_path, "r") as zipf:
+                zipf.extractall(f"./src")
+                logger.log_info(self, "Restored a backup", f"{selected_backup}")
+                return True
+
+        except Exception as e:
+            logger.log_error(self, "Restoring a backup", e)
+            return False
+        
+    def generate_one_use_restore_code(self, database, logger):
+        # Super Admin can do it. (only)
+        try:
+            logger.log_info(self, "Generating one use restore code")
+            backup_folder = "Backups"
+        
+            code = Helper.random_password_generator()
+            code = Helper.utils_hash(code)
 
             if not os.path.exists(backup_folder):
                 print("No backups found! Folder is empty or missing.")
@@ -304,33 +378,19 @@ class User:
                 print(f"{i}. {backup}")
 
             try:
-                choice = int(input("\nEnter the number of the backup to restore: ")) - 1
+                choice = int(input("\nEnter the number of the backup to create a one time use restore code: ")) - 1
                 selected_backup = backups[choice]
+
             except Exception as e:
                 print("Invalid choice!")
                 return False
-
-            zip_path = os.path.join(backup_folder, selected_backup)
-            with zipfile.ZipFile(zip_path, "r") as zipf:
-                zipf.extractall(f"./src")
-                logger.log_info(self, "Restored a backup", f"{selected_backup}")
-                return True
-
-        except Exception as e:
-            logger.log_error(self, "Restoring a backup", e)
-            return False
-
-    def generate_one_use_restore_code(self, database, logger):
-        # ToDo
-        # Super Admin can do it. (only)
-        try:
-            logger.log_info(self, "Generating one use restore code")
-            code = Helper.random_password_generator()
-            code = Helper.utils_hash(code)
-            result = database.add_one_time_use_code(code)
+        
+            result = database.add_one_time_use_code(zip_name=Helper.symmetric_encrypt(selected_backup), code=code)
+            print("This code will only be shown once, this is the one time use restore code: ", code)
             if result:
                 return True
             return False
+        
         except Exception as e:
             logger.log_error(self, "Making a one use restore code", e)
             return False
@@ -1034,7 +1094,7 @@ class User:
             attempts = 0
             while attempts < 3:
                 old_password = input("Enter current password: ").strip()
-                if Helper.verify_password(old_password, self.password_hash):  # Changed to password_hash
+                if Helper.utils_hash(old_password) == self.password:  # Changed to password_hash
                     break
                 attempts += 1
                 print(f"Invalid password. {3 - attempts} attempts remaining.")
@@ -1046,7 +1106,7 @@ class User:
             new_password = Helper.validate_password(input("Enter new password: ").strip())
 
             # Update password in database
-            new_password_hash = Helper.hash_password(new_password)
+            new_password_hash = Helper.utils_hash(new_password)
             return database.change_own_password(
                 user=self,
                 new_password=new_password_hash,
@@ -1083,4 +1143,23 @@ class User:
 
         except Exception as e:
             logger.log_error(self, "Updating own profile", e)
+            return False
+    
+    def delete_own_account(self, database, logger):
+        try:
+            logger.log_info(self, "Deleting own account")
+            print("\n=== DELETE OWN ACCOUNT ===")
+
+            while True:
+                print("Are you sure you want to delete your account? [Y/N]")
+                choice = input("> ").upper().strip()
+                if choice == "Y":
+                    return database.delete_own_account(self)
+                elif choice == "N":
+                    print("Account deletion cancelled.")
+                    return False
+                print("Invalid choice. Please enter Y or N.")
+
+        except Exception as e:
+            logger.log_error(self, "Deleting own account", e)
             return False

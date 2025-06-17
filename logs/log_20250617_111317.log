@@ -1,0 +1,8 @@
+2025-06-17 11:13:23,174 - INFO - User activity logged: Super Admin, Logged in, , Low Risk
+2025-06-17 11:13:23,182 - INFO - User activity logged: super_admin, Accessed Super Administrator Dashboard, , Low Risk
+2025-06-17 11:13:24,241 - INFO - User activity logged: super_admin, Accessed User Management, , Low Risk
+2025-06-17 11:13:34,356 - INFO - User activity logged: super_admin, Added b'gAAAAABoUTG-kp4bMcr6n7y72Cc4dcnlDeS3JNRdziwifuRKqxrUpwmZsY8XyJrJEUI5N5fbRN3kgiHbXnAh6m5-S88qT98Qng==', System Administrator, Low Risk
+2025-06-17 11:13:41,870 - INFO - User activity logged: telmoclaro, Logged in, , Low Risk
+2025-06-17 11:13:41,876 - INFO - User activity logged: telmoclaro, Accessed System Administrator Dashboard, , Low Risk
+2025-06-17 11:13:44,194 - INFO - User activity logged: telmoclaro, Accessed User Management, , Low Risk
+2025-06-17 11:13:56,745 - INFO - User activity logged: telmoclaro, Added b'gAAAAABoUTHUi7D3PGqhr0zXwgGYo4I6Ol0n0gGI78YTIbGv7EsB2LiptOCYk_7OExiSUnkO6pfu-5vrKwCK28eoU_jdH2aHag==', Service Engineer, Low Risk

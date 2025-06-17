@@ -1,0 +1,21 @@
+2025-06-16 22:10:07,324 - INFO - User activity logged: telmoclaro, Logged in, , Low Risk
+2025-06-16 22:10:07,332 - INFO - User activity logged: telmoclaro, Accessed System Administrator Dashboard, , Low Risk
+2025-06-16 22:10:08,425 - INFO - User activity logged: telmoclaro, Accessed Account Features, , Low Risk
+2025-06-16 22:10:13,243 - INFO - User activity logged: telmoclaro, Changing password, , Low Risk
+2025-06-16 22:10:18,080 - ERROR - User activity logged: telmoclaro, An unexpected error occurred in Account Features, Traceback (most recent call last):
+  File "c:\Users\Telmo Claro\Documents\Projects\FA_SQ_24_25_V1_1\src\models.py", line 1037, in change_own_password
+    if Helper.verify_password(old_password, self.password_hash):  # Changed to password_hash
+       ^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Helper' has no attribute 'verify_password'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "c:\Users\Telmo Claro\Documents\Projects\FA_SQ_24_25_V1_1\src\user_interface.py", line 393, in account_features_system_admin
+    if user.change_own_password(self._db, self._logger):
+       ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Telmo Claro\Documents\Projects\FA_SQ_24_25_V1_1\src\models.py", line 1056, in change_own_password
+    logger.log_error(self, f"Password change failed: {str(e)}")
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: Logger.log_error() missing 1 required positional argument: 'additional_info'
+, High Risk

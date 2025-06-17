@@ -339,7 +339,6 @@ class Ui:
                               activity_description="Accessed System Administrator Dashboard")
         try:
             while True:
-
                 print(f"=== SYSTEM ADMINISTRATOR DASHBOARD ===")
                 print(f"Welcome, {user.first_name} {user.last_name}!")
                 print("1. Account Features")
@@ -355,10 +354,10 @@ class Ui:
                 elif choice == "1":
                     self.account_features_system_admin(user)
                 elif choice == "2":
-                    # self.user_management_system_admin()
+                    self.user_management_system_admin(user)
                     return
                 elif choice == "3":
-                    # self.backup_management_system_admin()
+                    self.backup_management_system_admin(user)
                     return
                 elif choice == "4":
                     # self.data_management_system_admin()
@@ -407,6 +406,7 @@ class Ui:
                     if user.delete_own_account(self._db, self._logger):
                         print("Account deleted successfully!")
                         input("Press Enter to continue...")
+                        self.landing()
                     else:
                         print("Failed to delete account. Please try again.")
                         input("Press Enter to continue...")
@@ -418,3 +418,101 @@ class Ui:
                                   activity_description="An unexpected error occurred in Account Features",
                                   additional_info=e)
             print("An unexpected error occurred. Please try again later.")
+    
+    def user_management_system_admin(self, user):
+        try:
+            self._logger.log_info(user=user,
+                                 activity_description="Accessed User Management",
+                                 additional_info="")
+            while True:
+                print("=== USER MANAGEMENT ===")
+                print("1. Add new Service Engineer")
+                print("2. Modify or update Service Engineer")
+                print("3. Delete Service Engineer")
+                print("4. Reset Service Engineer password (temporary)")
+                print("5. View Users")
+                print("\nQ. Back\n")
+                choice = input("> ").strip().lower()
+
+                if choice == "q":
+                    break
+                elif choice == "1":
+                    if user.add_new_service_engineer(self._db, self._logger):
+                        print("Service Engineer added successfully!")
+                        input("Press Enter to continue...")
+                    else:
+                        print("Failed to add Service Engineer. Please try again.")
+                        input("Press Enter to continue...")
+                elif choice == "2":
+                    if user.update_service_engineer(self._db, self._logger):
+                        print("Service Engineer updated successfully!")
+                        input("Press Enter to continue...")
+                    else:
+                        print("Failed to update Service Engineer. Please try again.")
+                        input("Press Enter to continue...")
+                elif choice == "3":
+                    if user.delete_service_engineer(self._db, self._logger):
+                        print("Service Engineer deleted successfully!")
+                        input("Press Enter to continue...")
+                    else:
+                        print("Failed to delete Service Engineer. Please try again.")
+                        input("Press Enter to continue...")
+                elif choice == "4":
+                    if user.reset_service_engineer_password(self._db, self._logger):
+                        print("Service Engineer password reset successfully!")
+                        input("Press Enter to continue...")
+                    else:
+                        print("Failed to reset Service Engineer password. Please try again.")
+                        input("Press Enter to continue...")
+                elif choice == "5":
+                    if user.view_users(self._db, self._logger):
+                        input("Press Enter to continue...")
+                    else:
+                        print("Failed to view users. Please try again.")
+                        input("Press Enter to continue...")
+        except Exception as e:
+            self._logger.log_error(user=user,
+                                  activity_description="An unexpected error occurred in User Management",
+                                  additional_info=e)
+            
+            print("An unexpected error occurred. Please try again later.")
+            input("Press Enter to continue...")
+            self.landing_system_admin(user)
+            
+    def backup_management_system_admin(self, user):
+        try:
+            self._logger.log_info(user=user,
+                                  activity_description="Accessed Backup Management",
+                                  additional_info="")
+            while True:
+                print("\n=== BACKUP MANAGEMENT ===")
+                print("1. Create system backup")
+                print("2. Restore system backup (with one-use restore code)")
+                print("\nQ. Back\n")
+                choice = input("> ").strip().lower()
+                print("")
+
+                if choice == "q":
+                    break
+                elif choice == "1":
+                    if user.create_system_backup(self._db, self._logger):
+                        print("System backup created successfully!")
+                    else:
+                        print("Feature not yet implemented")
+                    input("Press Enter to continue...")
+                elif choice == "2":
+                    if user.restore_system_backup_with_code(self._db, self._logger):
+                        print("System backup restored successfully!")
+                    else:
+                        print("An error occurred. Please try again.")
+                    input("Press Enter to continue...")
+                else:
+                    print("An error occurred. Please try again.")
+                    input("Press Enter to continue...")
+        except Exception as e:
+            self._logger.log_error(user=user,
+                                  activity_description="An unexpected error occurred in Backup Management",
+                                  additional_info=e)
+            print("An unexpected error occurred. Please try again later.")
+            input("Press Enter to continue...")
+            self.landing_system_admin(user)

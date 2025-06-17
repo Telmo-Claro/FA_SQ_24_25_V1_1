@@ -80,6 +80,7 @@ class Database:
                     """CREATE TABLE IF NOT EXISTS codes (
                         id INTEGER PRIMARY KEY,
                         code TEXT,
+                        zip_name TEXT,
                         is_used BOOLEAN DEFAULT 0
                     )"""
                     ]
@@ -263,6 +264,7 @@ class Database:
                     username=user[3],
                     password=user[4],
                     role=user[5],
+                    id=user[0]
                 )
         return False
 
@@ -296,13 +298,14 @@ class Database:
             return True
 
     "ONE TIME USE CODE RELATED"
-    def add_one_time_use_code(self, code):
+    def add_one_time_use_code(self, zip_name, code ):
         try:
+            self.revoke_one_time_use_code()  # Make sure all previous codes are unusable
             with sqlite3.connect(self.path) as conn:
                 cursor = conn.cursor()
-                query = """INSERT INTO codes (code, is_used)
-                        VALUES (?, ?)"""
-                cursor.execute(query, (code, 0))
+                query = """INSERT INTO codes (code, zip_name, is_used)
+                        VALUES (?, ?, ?)"""
+                cursor.execute(query, (code, zip_name, 0))
                 conn.commit()
                 cursor.close()
                 return True
@@ -328,8 +331,9 @@ class Database:
                 # Get the most recent unused code
                 query = """SELECT code FROM codes
                           WHERE is_used = 0
+                          AND zip_name = ?
                           ORDER BY id DESC
-                          LIMIT 1"""
+                          """
                 cursor.execute(query)
                 result = cursor.fetchone()
 
@@ -569,3 +573,20 @@ class Database:
         except Exception as e:
             print(f"Database error: {e}")
             return False
+    
+    def delete_own_account(self, user):
+        try:
+            with sqlite3.connect(self.path) as conn:
+                cursor = conn.cursor()
+                query = """DELETE FROM users WHERE id = ?"""
+                cursor.execute(query, (user.id,))
+                conn.commit()
+                if cursor.rowcount > 0:
+                    return True
+                else:
+                    print("No rows were deleted - user ID may not exist")
+                    return False
+        except Exception as e:
+            print(f"Database error: {e}")
+            return False
+        

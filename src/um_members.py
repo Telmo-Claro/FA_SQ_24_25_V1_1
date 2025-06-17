@@ -7,4 +7,4 @@ if __name__ == "__main__":
     db.load()
     log = Logger(db) # initialize the logger
     main_ui = ui.Ui(log, db) # initializes the main UI
-    main_ui.landing() # start the application with the landing page
+    main_ui.landing() # start the application with the landing page1
