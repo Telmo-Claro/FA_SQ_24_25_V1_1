@@ -318,11 +318,11 @@ class User:
             logger.log_error(self, "Restoring a backup", e)
             return False
 
-    def restore_one_system_backup(self, database, logger, code):
+    def restore_one_system_backup(self, database, logger):
         try:
             backups_database = database.return_all("codes")
             for backup in backups_database:
-                print(f"Backup ID: {backup[0]}, Backup Name: {Helper.symmetric_decrypt(backup[1])}")
+                print(f"Backup ID: {backup[0]}, Backup Name: {Helper.symmetric_decrypt(backup[2])}")
             while True:
                 try:
                     choice = input("Enter the ID of the backup you want to restore: ")
@@ -330,14 +330,16 @@ class User:
                     if choice < 1 or choice > len(backups_database):
                         print("Invalid choice!")
                         return False
-                    if backups_database[choice - 1][2] != code:
+                    print("Please enter the one time use restore code for this backup:")
+                    code_from_user = input("> ")
+                    if Helper.symmetric_decrypt(backups_database[choice - 1][1]) != code_from_user:
                         print("This code does not match the backup you selected!")
                         return False
                     break
                 except Exception as e:
                     print("Invalid choice!")
 
-            selected_backup = Helper.symmetric_decrypt(backups_database[choice - 1][1]) # chooses the name zip_name of the backup file
+            selected_backup = Helper.symmetric_decrypt(backups_database[choice - 1][2]) # chooses the name zip_name of the backup file
             backup_folder = "Backups"
 
             if not os.path.exists(backup_folder):
@@ -362,7 +364,9 @@ class User:
             backup_folder = "Backups"
         
             code = Helper.random_password_generator()
-            code = Helper.utils_hash(code)
+            print("This code will only be shown once, this is the one time use restore code: ", code)
+            input("Press Enter to continue...")
+            code = Helper.symmetric_encrypt(code)
 
             if not os.path.exists(backup_folder):
                 print("No backups found! Folder is empty or missing.")
@@ -386,7 +390,6 @@ class User:
                 return False
         
             result = database.add_one_time_use_code(zip_name=Helper.symmetric_encrypt(selected_backup), code=code)
-            print("This code will only be shown once, this is the one time use restore code: ", code)
             if result:
                 return True
             return False
@@ -396,7 +399,6 @@ class User:
             return False
 
     def revoke_one_use_restore_code(self, database, logger):
-        # ToDo
         # Super Admin can do it. (only)
         try:
             code = database.return_one_time_use_code()
@@ -508,7 +510,7 @@ class User:
             )
 
         except Exception as e:
-            logger.log_error(self, f"Error adding scooter". e)
+            logger.log_error(self, "Error adding scooter", e)
             return False
 
     def admin_update_scooter(self, database, logger):
@@ -1163,3 +1165,67 @@ class User:
         except Exception as e:
             logger.log_error(self, "Deleting own account", e)
             return False
+        
+    def engineer_partial_scooter_update(self, database, logger):
+        try:
+            logger.log_info(self, "Partial scooter update")
+
+            while True:
+                scooters = database.return_all_scooters()
+                print("\nCurrent scooters:")
+                for scooter in scooters:
+                    print(f"ID: {scooter[0]}, "
+                        f"Brand: {Helper.symmetric_decrypt(scooter[2])}, "
+                        f"Model: {Helper.symmetric_decrypt(scooter[3])}, "
+                        f"Serial: {Helper.symmetric_decrypt(scooter[4])}")
+                number_of_scooters = len(scooters)
+                print("\nEnter the ID of the scooter you want to update.")
+                input_id = input("> ")
+                try:
+                        input_id = int(input_id)
+                        if input_id > number_of_scooters:
+                            print("Invalid ID. Please try again.")
+                            continue
+                        else:
+                            break
+                except ValueError:
+                    print("Invalid ID. Please try again.\n")
+                    
+                scooter_to_update = database.return_scooter_by_id(input_id)
+                print("\nScooter to update:")
+                print(f"ID: {scooter_to_update[0]}")
+                print(f"Brand: {Helper.symmetric_decrypt(scooter_to_update[2])}")
+                print(f"Model: {Helper.symmetric_decrypt(scooter_to_update[3])}")
+                print(f"Serial: {Helper.symmetric_decrypt(scooter_to_update[4])}")
+
+                validation = input("Is this scooter correct [Y/N]: ").strip().lower()
+                if validation == "y":
+                    break
+                elif validation == "n":
+                    continue
+            
+            fields = ["state_of_charge", "target_range_soc", "location", "out_of_service_status", "mileage", "last_maintenance_date"]
+
+            while True:
+                print("Which field do you want to update?")
+                for i, field in enumerate(fields, 1):
+                    print(f"{i}. {field.upper()}")
+                field = input("> ")
+                try:
+                    if int(field) > len(fields):
+                        print("Invalid choice. Please try again.")
+                except:
+                    print("Invalid choice. Please try again.")
+                break
+            
+            print(f"Please enter the new {fields[int(field) - 1]}:")
+            new_value = input("> ")
+
+            if database.update_one("scooters", fields[int(field) - 1], Helper.symmetric_encrypt(new_value), input_id):
+                return True
+            return False
+        
+        except Exception as e:
+            logger.log_error(self, "Partial scooter update", e)
+            return False
+        

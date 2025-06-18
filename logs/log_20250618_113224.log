@@ -1,0 +1,12 @@
+2025-06-18 11:32:30,143 - INFO - User activity logged: elisedang, Logged in, , Low Risk
+2025-06-18 11:32:30,149 - INFO - User activity logged: elisedang, Accessed System Administrator Dashboard, , Low Risk
+2025-06-18 11:32:31,463 - INFO - User activity logged: elisedang, Accessed Account Features, , Low Risk
+2025-06-18 11:32:32,915 - INFO - User activity logged: elisedang, Searching scooter, , Low Risk
+2025-06-18 11:32:40,266 - INFO - User activity logged: elisedang, Partial scooter update, , Low Risk
+2025-06-18 11:32:50,888 - ERROR - User activity logged: elisedang, Partial scooter update, Traceback (most recent call last):
+  File "c:\Users\Telmo\OneDrive\Documents\GitHub\FA_SQ_24_25_V1_1\src\models.py", line 1224, in engineer_partial_scooter_update
+    if database.update_one(self, fields[int(field) - 1], new_value):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: Database.update_one() missing 1 required positional argument: 'id'
+, High Risk
+2025-06-18 11:32:52,888 - INFO - User activity logged: elisedang, Accessed System Administrator Dashboard, , Low Risk

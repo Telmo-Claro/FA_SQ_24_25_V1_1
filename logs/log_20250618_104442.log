@@ -1,0 +1,13 @@
+2025-06-18 10:44:48,199 - INFO - User activity logged: telmoclaro, Logged in, , Low Risk
+2025-06-18 10:44:48,206 - INFO - User activity logged: telmoclaro, Accessed System Administrator Dashboard, , Low Risk
+2025-06-18 10:44:49,260 - INFO - User activity logged: telmoclaro, Accessed Backup Management, , Low Risk
+2025-06-18 10:44:53,125 - ERROR - User activity logged: telmoclaro, Restoring a backup, Traceback (most recent call last):
+  File "c:\Users\Telmo\OneDrive\Documents\GitHub\FA_SQ_24_25_V1_1\src\models.py", line 351, in restore_one_system_backup
+    with zipfile.ZipFile(zip_path, "r") as zipf:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\zipfile.py", line 1294, in __init__
+    self.fp = io.open(file, filemode)
+              ^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'Backups\\Gsd}Lf)]nz6p'
+, High Risk
+2025-06-18 10:44:54,955 - INFO - User activity logged: telmoclaro, Accessed System Administrator Dashboard, , Low Risk

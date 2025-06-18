@@ -27,7 +27,11 @@ class Ui:
                 input("Press Enter to continue...")
 
     def login(self):
+        tries = 0
         while True:
+            if tries > 2:
+                self._logger.log_warning("None", "Too many logins attempts")
+                break
             print("LOGIN")
             print("If you wish to cancel, enter 'exit' as the username.")
             username = input("Username: ").lower().strip()
@@ -51,10 +55,11 @@ class Ui:
                 self.landing_system_admin(user)
                 break
             elif user.role == "Service Engineer":
-                print("You don't exist... yet")
+                self.landing_service_engineer(user)
                 input("Press Enter to continue...")
                 break
             else:
+                tries = tries + 1
                 print("Wrong username or password. Try again!")
                 input("Press Enter to continue...")
 
@@ -120,8 +125,7 @@ class Ui:
                 print("")
 
                 if choice == "q":
-                    print("Exiting...")
-                    break
+                    self.landing_super_admin(user)
                 elif choice == "1":
                     if user.add_new_system_admin(self._db, self._logger):
                         print("System Administrator added successfully!")
@@ -223,7 +227,7 @@ class Ui:
             print("")
 
             if choice == "q":
-                break
+                 self.landing_super_admin(user)
             elif choice == "1":
                 if user.create_system_backup(self._db, self._logger):
                     print("System backup created successfully!")
@@ -274,7 +278,7 @@ class Ui:
             print("")
 
             if choice == "q":
-                break
+                self.landing_super_admin(user)
             elif choice == "1":
                 if user.add_scooter(self._db, self._logger):
                     print("Scooter added successfully!")
@@ -360,7 +364,7 @@ class Ui:
                     self.backup_management_system_admin(user)
                     return
                 elif choice == "4":
-                    # self.data_management_system_admin()
+                    self.data_management_system_admin(user)
                     return
                 else:
                     print("Invalid option. Please try again.")
@@ -387,7 +391,7 @@ class Ui:
                 choice = input("> ").strip().lower()
                 print("")
                 if choice == "q":
-                    break
+                    self.landing_system_admin(user)
                 elif choice == "1":
                     if user.change_own_password(self._db, self._logger):
                         print("Password changed successfully!")
@@ -435,7 +439,7 @@ class Ui:
                 choice = input("> ").strip().lower()
 
                 if choice == "q":
-                    break
+                    self.landing_system_admin(user)
                 elif choice == "1":
                     if user.add_new_service_engineer(self._db, self._logger):
                         print("Service Engineer added successfully!")
@@ -493,7 +497,7 @@ class Ui:
                 print("")
 
                 if choice == "q":
-                    break
+                    self.landing_system_admin(user)
                 elif choice == "1":
                     if user.create_system_backup(self._db, self._logger):
                         print("System backup created successfully!")
@@ -501,7 +505,7 @@ class Ui:
                         print("Feature not yet implemented")
                     input("Press Enter to continue...")
                 elif choice == "2":
-                    if user.restore_system_backup_with_code(self._db, self._logger):
+                    if user.restore_one_system_backup(self._db, self._logger):
                         print("System backup restored successfully!")
                     else:
                         print("An error occurred. Please try again.")
@@ -509,6 +513,7 @@ class Ui:
                 else:
                     print("An error occurred. Please try again.")
                     input("Press Enter to continue...")
+                    
         except Exception as e:
             self._logger.log_error(user=user,
                                   activity_description="An unexpected error occurred in Backup Management",
@@ -516,3 +521,191 @@ class Ui:
             print("An unexpected error occurred. Please try again later.")
             input("Press Enter to continue...")
             self.landing_system_admin(user)
+    
+    def data_management_system_admin(self, user):
+        while True:
+            print("\n=== DATA MANAGEMENT ===")
+            print("\n=== Scooters ===")
+            print("1. Add new scooter")
+            print("2. Modify or update scooter")
+            print("3. Delete scooter")
+            print("4. Search scooter")
+            
+            print("\n=== Travellers ===")
+            print("5. Add new traveller")
+            print("6. Modify or update traveller")
+            print("7. Delete traveller")
+            print("8. Search traveller")
+            
+            print("\n=== Other ===")
+            print("9. View logs")
+            print("\nQ. Back\n")
+            choice = input("> ").strip().lower()
+            print("")
+
+            if choice == "q":
+                self.landing_system_admin(user)
+            elif choice == "1":
+                if user.add_scooter(self._db, self._logger):
+                    print("Scooter added successfully!")
+                    input("Press enter to continue...")
+                else:
+                    print("Feature not yet implemented")
+                input("Press Enter to continue...")
+            elif choice == "2":
+                if user.admin_update_scooter(self._db, self._logger):
+                    print("Scooter updated successfully!")
+                else:
+                    print("Feature not yet implemented")
+                input("Press Enter to continue...")
+            elif choice == "3":
+                if user.admin_delete_scooter(self._db, self._logger):
+                    print("Scooter deleted successfully!")
+                else:
+                    print("Feature not yet implemented")
+                input("Press Enter to continue...")
+            elif choice == "4":
+                if user.search_scooter(self._db, self._logger):
+                    print("")
+                else:
+                    print("Feature not yet implemented")
+                input("Press Enter to continue...")
+            elif choice == "5":
+                if user.add_traveler(self._db, self._logger):
+                    print("Traveller added successfully!")
+                else:
+                    print("Feature not yet implemented")
+                input("Press Enter to continue...")
+            elif choice == "6":
+                if user.update_traveler(self._db, self._logger):
+                    print("Traveller updated successfully!")
+                else:
+                    print("Feature not yet implemented")
+                input("Press Enter to continue...")
+            elif choice == "7":
+                if user.delete_traveler(self._db, self._logger):
+                    print("Traveller deleted successfully!")
+                else:
+                    print("Feature not yet implemented")
+                input("Press Enter to continue...")
+            elif choice == "8":
+                if user.search_traveller(self._db, self._logger):
+                    print("")
+                else:
+                    print("Feature not yet implemented")
+                input("Press Enter to continue...")
+            elif choice == "9":
+                if user.view_logs(self._db, self._logger):
+                    print("Logs viewed successfully!")
+                else:
+                    print("Feature not yet implemented")
+                input("Press Enter to continue...")
+            else:
+                print("Invalid option. Please try again.")
+                input("Press Enter to continue...")
+
+    "SERVICE ENGINEER STUFF"
+
+    def landing_service_engineer(self, user):
+        self._logger.log_info(user=user,
+                              activity_description="Accessed System Administrator Dashboard")
+        try:
+            while True:
+                print(f"=== SYSTEM ADMINISTRATOR DASHBOARD ===")
+                print(f"Welcome, {user.first_name} {user.last_name}!")
+                print("1. Account Features")
+                print("2. Scooter Management")
+                print("Q) Logout")
+                choice = input("> ").strip().lower()
+                print("")
+
+                if choice == "q":
+                    self.landing()
+                elif choice == "1":
+                    self.account_features_service_engineer(user)
+                elif choice == "2":
+                    self.scooter_management_service_engineer(user)
+                    return
+                else:
+                    print("Invalid option. Please try again.")
+
+        except Exception as e:
+            self._logger.log_error(user=user,
+                                  activity_description="An unexpected error occurred in the System Administrator Dashboard",
+                                  additional_info=e)
+            print("An unexpected error occurred. Please try again later.")
+            input("Press Enter to continue...")
+            self.landing()
+
+    def account_features_service_engineer(self, user):
+        self._logger.log_info(user=user,
+                              activity_description="Accessed Account Features",
+                              additional_info="")
+        try:
+            while True:
+                print("\n=== ACCOUNT FEATURES ===")
+                print("1. Change password")
+                print("2. Update own profile")
+                print("\nQ. Back\n")
+                choice = input("> ").strip().lower()
+                print("")
+                if choice == "q":
+                    self.landing_service_engineer(user)
+                elif choice == "1":
+                    if user.change_own_password(self._db, self._logger):
+                        print("Password changed successfully!")
+                        input("Press Enter to continue...")
+                    else:
+                        print("Failed to change password. Please try again.")
+                        input("Press Enter to continue...")
+                elif choice == "2":
+                    if user.update_own_profile(self._db, self._logger):
+                        print("Profile updated successfully!")
+                        input("Press Enter to continue...")
+                    else:
+                        print("Failed to update profile. Please try again.")
+                        input("Press Enter to continue...")
+                else:
+                    print("Invalid option. Please try again.")
+                    input("Press Enter to continue...")
+        except Exception as e:
+            self._logger.log_error(user=user,
+                                  activity_description="An unexpected error occurred in Account Features",
+                                  additional_info=e)
+            print("An unexpected error occurred. Please try again later.")
+    
+    def scooter_management_service_engineer(self, user):
+        self._logger.log_info(user=user,
+                              activity_description="Accessed Account Features",
+                              additional_info="")
+        try:
+            while True:
+                print("\n=== SCOOTER MANAGEMENT ===")
+                print("1. Update scooter attributes")
+                print("2. Search scooter")
+                print("\nQ. Back\n")
+                choice = input("> ").strip().lower()
+                print("")
+                if choice == "q":
+                    self.landing_service_engineer(user)
+                elif choice == "1":
+                    if user.engineer_partial_scooter_update(self._db, self._logger):
+                        print("Success!")
+                        input("Press Enter to continue...")
+                    else:
+                        input("Press Enter to continue...")
+                elif choice == "2":
+                    if user.search_scooter(self._db, self._logger):
+                        print("Success!")
+                        input("Press Enter to continue...")
+                    else:
+                        print("Failed. Please try again.")
+                        input("Press Enter to continue...")
+                else:
+                    print("Invalid option. Please try again.")
+                    input("Press Enter to continue...")
+        except Exception as e:
+            self._logger.log_error(user=user,
+                                  activity_description="An unexpected error occurred in Account Features",
+                                  additional_info=e)
+            print("An unexpected error occurred. Please try again later.")
